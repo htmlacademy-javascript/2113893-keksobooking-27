@@ -2,10 +2,11 @@
 // Функция, возвращающая случайное целое число из переданного диапазона включительно.
 
 function getRoundInteger (min, max) {
-  if (min < 0 || max < 0) {
+  if (min < 0 || max < 0 || !Number.isFinite(min) || !Number.isFinite(min)) {
     return 'NaN';
-  }
-  else if (min > max) {
+  } else if (min === 0 && max === 0) {
+    return 0;
+  } else if (min > max) {
     [min,max] = [max,min];
   }
   return Math.floor(Math.random() * (max - min + 1) ) + min;
