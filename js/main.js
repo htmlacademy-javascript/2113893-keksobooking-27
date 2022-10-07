@@ -1,7 +1,7 @@
 // Количество объявлений
-const CARDS_COUNT = 10;
+const CARDS_COUNT = 3;
 // Количество аватарок
-const avatarNumberMax = 10;
+const avatarNumberMax = 3;
 // Массив свободных номеров под аватарки
 const avatarNumbers = [];
 for (let i = 1; i <= avatarNumberMax; ++i) {
@@ -10,8 +10,11 @@ for (let i = 1; i <= avatarNumberMax; ++i) {
 avatarNumbers.sort(()=>Math.random() - 0.5);
 // Названия объявлений
 const TITLES = [
-  'estate1',
-  'estate2'
+  'Прекрасная вилла',
+  'Жалкая лачуга',
+  'Квартирка',
+  'Хоромы',
+  'Особняк олигарха'
 ];
 // Случайное целое число
 const getRoundInteger = (min, max) => {
@@ -28,10 +31,10 @@ const getRoundInteger = (min, max) => {
 const getFloatNumber = (min, max, decimals) => {
   if (min < 0 || max < 0 || decimals < 0 || !Number.isFinite(min) || !Number.isFinite(min) || !Number.isFinite(decimals)) {
     return NaN;
-  } else if (min > max) {
-    return +((Math.random() * (min - max)) + max).toFixed(decimals);
   } else if (min === 0 && max === 0) {
     return 0;
+  } else if (min > max) {
+    [min,max] = [max,min];
   }
   return +((Math.random() * (max - min)) + min).toFixed(decimals);
 };
@@ -47,17 +50,25 @@ const getAvatar = () => {
   return `img/avatars/user${avatarNumber}.png`;
 };
 // Генерим данные для карточки объявления
-const createCard = () => ({
-  author: {avatar: getAvatar()},
-  offer: {title: getRandomArrayElement(TITLES)},
-  location: {lat: getFloatNumber(35.65000, 35.70000, 5),
-    lng: getFloatNumber(139.70000, 139.80000, 5)
-  }
-});
-// Массив объявлений
+const createCard = () => {
+  const latitude = getFloatNumber(35.65000, 35.70000, 5);
+  const longitude = getFloatNumber(139.70000, 139.80000, 5);
+  return {
+    author: {avatar: getAvatar()},
+    offer: {
+      title: getRandomArrayElement(TITLES),
+      address: `${latitude}, ${longitude}`,
+      price: `${getRoundInteger(1, 100)} млн ₽`
+    },
+    location: {
+      lat: latitude,
+      lng: longitude
+    }};
+};
+// Создаём массив из объявлений
 const cardsArray = Array.from({length: CARDS_COUNT}, createCard);
 
-cardsArray();
+console.log(cardsArray);
 
 /*
 Случайная аватарка
