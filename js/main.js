@@ -34,7 +34,7 @@ const OFFER_CHECKIN_ARRAY = ['12:00', '13:00', '14:00'];
 // Часы выезда
 const OFFER_CHECKOUT_ARRAY = ['12:00', '13:00', '14:00'];
 
-// Случайное целое число'
+// Случайное целое число
 const getRoundInteger = (min, max) => {
   if (min < 0 || max < 0 || !Number.isFinite(min) || !Number.isFinite(min)) {
     return NaN;
@@ -135,7 +135,7 @@ const createCard = () => {
       checkin: `${getRandomArrayElement(OFFER_CHECKIN_ARRAY)} время заезда`,
       checkout: `${getRandomArrayElement(OFFER_CHECKOUT_ARRAY)} время выезда`,
       features: Array.from({length: getRoundInteger(OFFER_FEATURES_MIN, OFFER_FEATURES_ARRAY.length)}, createFeature),
-      description: Array.from({length: getRoundInteger(OFFER_DESCRIPTION_MIN, OFFER_DESCRIPTION_ARRAY.length)}, createDescription),
+      description: Array.from({length: getRoundInteger(OFFER_DESCRIPTION_MIN, OFFER_DESCRIPTION_ARRAY.length)}, createDescription).join(' '),
       photos: Array.from({length: getRoundInteger(OFFER_PHOTOS_MIN, OFFER_PHOTOS_ARRAY.length)}, createPhoto)
     },
     location: {
