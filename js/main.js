@@ -1,8 +1,8 @@
 // Количество объявлений
-const CARDS_COUNT = 3;
+const CARDS_COUNT = 10;
 
 // Количество аватарок
-const avatarNumberMax = 3;
+const avatarNumberMax = 10;
 
 // Массив свободных номеров под аватарки
 const avatarNumbers = [];
@@ -34,25 +34,12 @@ const OFFER_CHECKIN_ARRAY = ['12:00', '13:00', '14:00'];
 // Часы выезда
 const OFFER_CHECKOUT_ARRAY = ['12:00', '13:00', '14:00'];
 
-// Преимущества и особенности жилья
-const OFFER_FEATURES_MIN = 1;
-const OFFER_FEATURES_ARRAY = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-
-// Описание жилья
-
-// Фото жилья, минимальное и максимальное их число + ссылки
-const OFFER_PHOTOS_MIN = 1;
-const OFFER_PHOTOS_MAX = 3;
-const OFFER_PHOTOS_ARRAY = [
-  'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',
-  'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
-  'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'
-];
-
 // Случайное целое число'
 const getRoundInteger = (min, max) => {
   if (min < 0 || max < 0 || !Number.isFinite(min) || !Number.isFinite(min)) {
     return NaN;
+  } else if (min === max) {
+    return min;
   } else if (min === 0 && max === 0) {
     return 0;
   } else if (min > max) {
@@ -66,6 +53,8 @@ const getFloatNumber = (min, max, decimals) => {
   if (min < 0 || max < 0 || decimals < 0 ||
     !Number.isFinite(min) || !Number.isFinite(min) || !Number.isFinite(decimals)) {
     return NaN;
+  } else if (min === max) {
+    return min;
   } else if (min === 0 && max === 0) {
     return 0;
   } else if (min > max) {
@@ -86,12 +75,54 @@ const getAvatar = () => {
   }
   return `img/avatars/user${avatarNumber}.png`;
 };
-const createFeature = () => getRandomArrayElement(OFFER_FEATURES_ARRAY);
-const createPhoto = () => getRandomArrayElement(OFFER_PHOTOS_ARRAY);
+
+// Получить случайный элемент массива без повторов
+const getRandomArrayElementAndDeleteElement = (array) => {
+  const currentArrayElementNumber = getRoundInteger(0, array.length - 1);
+  const currentArrayElement = array[currentArrayElementNumber];
+  array.splice(currentArrayElementNumber, 1);
+  return currentArrayElement;
+};
+
 // Генерим данные для карточки объявления
 const createCard = () => {
+
+  // Преимущества и особенности жилья
+  const OFFER_FEATURES_ARRAY = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+  const OFFER_FEATURES_MIN = 0;
+  const createFeature = () => getRandomArrayElementAndDeleteElement(OFFER_FEATURES_ARRAY);
+
+  // Описание жилья
+  const OFFER_DESCRIPTION_ARRAY = [
+    'Жильё оборудовано бытовой техникой.',
+    'Просторная спальня, большая кухня.',
+    'Квартира находится на среднем этаже.',
+    'В доме чистые подъезды и лифты, добрые соседи.',
+    'Выгодная планировка.',
+    'Просторная и уютная лоджия с новыми стеклопакетами, отапливаемая.',
+    'Дом в хорошем техническом состоянии, не старый.',
+    'Приятный ремонт.',
+    'Отдельно обговаривается продажа со всей мебелью.',
+    'Удобное расположение позволит вам использовать все преимущества развитой инфраструктуры.',
+    'Я здесь вырос и люблю жильё всей душой.',
+    'Очень хорошая энергетика.',
+  ];
+  const OFFER_DESCRIPTION_MIN = 1;
+  const createDescription = () => getRandomArrayElementAndDeleteElement(OFFER_DESCRIPTION_ARRAY);
+
+  // Фото жилья
+  const OFFER_PHOTOS_ARRAY = [
+    'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',
+    'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
+    'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'
+  ];
+  const OFFER_PHOTOS_MIN = 1;
+  const createPhoto = () => getRandomArrayElementAndDeleteElement(OFFER_PHOTOS_ARRAY);
+
+  // Координаты, высота и долгота
   const latitude = getFloatNumber(35.65000, 35.70000, 5);
   const longitude = getFloatNumber(139.70000, 139.80000, 5);
+
   return {
     author: {avatar: getAvatar()},
     offer: {
@@ -104,8 +135,8 @@ const createCard = () => {
       checkin: `${getRandomArrayElement(OFFER_CHECKIN_ARRAY)} время заезда`,
       checkout: `${getRandomArrayElement(OFFER_CHECKOUT_ARRAY)} время выезда`,
       features: Array.from({length: getRoundInteger(OFFER_FEATURES_MIN, OFFER_FEATURES_ARRAY.length)}, createFeature),
-      description: ['test'],
-      photos: Array.from({length: getRoundInteger(OFFER_PHOTOS_MIN, OFFER_PHOTOS_MAX)}, createPhoto)
+      description: Array.from({length: getRoundInteger(OFFER_DESCRIPTION_MIN, OFFER_DESCRIPTION_ARRAY.length)}, createDescription),
+      photos: Array.from({length: getRoundInteger(OFFER_PHOTOS_MIN, OFFER_PHOTOS_ARRAY.length)}, createPhoto)
     },
     location: {
       lat: latitude,
@@ -116,133 +147,4 @@ const createCard = () => {
 // Создаём массив из объявлений
 const cardsArray = Array.from({length: CARDS_COUNT}, createCard);
 
-console.log(cardsArray);
-
-/*
-Случайная аватарка
-const getAvatar = (max) => {
-  let avatarNumber = getRoundInteger(1, max);
-  avatarNumbers.splice(avatarNumber - 1, 1);
-  --avatarNumberMax;
-  if (avatarNumber < 10) {
-    avatarNumber = `0${String(avatarNumber)}`;
-  }
-  return `img/avatars/user${avatarNumber}.png`;
-};
-
-ДЗ 2, функция 2, краткая запись
-
-function getFloatNumber (min, max, decimals) {
-  return (min < 0 || max < 0 || decimals < 0 ||
-    !Number.isFinite(min) || !Number.isFinite(min) || !Number.isFinite(decimals)) ? 'NaN' :
-    (min === 0 && max === 0) ? 0 :
-    (min > max) ? +((Math.random() * (min - max + 1)) + max).toFixed(decimals) :
-    +((Math.random() * (max - min + 1)) + min).toFixed(decimals);
-}
-getFloatNumber(0, 0, 5);
-
-ДЗ 2, функция 2, развёрнутая запись
-
-const getFloatNumber = (min, max, decimals) => {
-  if (min < 0 || max < 0 || decimals < 0 ||
-    !Number.isFinite(min) || !Number.isFinite(min) || !Number.isFinite(decimals)) {
-    return 'NaN';
-  } else if (min > max) {
-    return +((Math.random() * (min - max + 1)) + max).toFixed(decimals);
-  } else if (min === 0 && max === 0) {
-    return 0;
-  }
-  return +((Math.random() * (max - min + 1)) + min).toFixed(decimals);
-};
-
-getFloatNumber(0, 0, 5);
-
-ДЗ 2, функция 1 краткая запись
-
-function getRoundInteger (min, max) {
-  return (min < 0 || max < 0 || !Number.isFinite(min) || !Number.isFinite(min)) ?  'NaN' :
-  (min > max) ? Math.floor(Math.random() * (min - max + 1) ) + max:
-  Math.floor(Math.random() * (max - min + 1) ) + min;
-}
-getRoundInteger(1, 10);
-
-ДЗ 2, функция 1 развёрнутая запись
-
-const getRoundInteger = (min, max) => {
-  if (min < 0 || max < 0 || !Number.isFinite(min) || !Number.isFinite(min)) {
-    return 'NaN';
-  } else if (min === 0 && max === 0) {
-    return 0;
-  } else if (min > max) {
-    [min,max] = [max,min];
-  }
-  return Math.floor(Math.random() * (max - min + 1) ) + min;
-};
-
-getRoundInteger(1, 10);
-
-
-const CARDS_COUNT = 3;
-const OFFER_TITLES_ARRAY = ['Прекрасная вилла', 'Жалкая лачуга', 'Квартирка', 'Хоромы', 'Особняк олигарха'];
-const OFFER_PRICE_MIN = 1;
-const OFFER_PRICE_MAX = 100;
-const OFFER_TYPE_ARRAY = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
-const OFFER_ROOMS_MIN = 1;
-const OFFER_ROOMS_MAX = 100;
-const OFFER_GUESTS_MIN = 1;
-const OFFER_GUESTS_MAX = 100;
-const OFFER_CHECKIN_ARRAY = ['12:00', '13:00', '14:00'];
-const OFFER_CHECKOUT_ARRAY = ['12:00', '13:00', '14:00'];
-const OFFER_FEATURES_MIN = 1;
-const OFFER_FEATURES_ARRAY = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-const OFFER_PHOTOS_MIN = 1;
-const OFFER_PHOTOS_MAX = 5;
-const OFFER_PHOTOS_ARRAY = ['1.jpg', '2.jpg', '3.jpg'];
-const getRoundInteger = (min, max) => {
-  if (min < 0 || max < 0 || !Number.isFinite(min) || !Number.isFinite(min)) {
-    return NaN;
-  } else if (min === 0 && max === 0) {
-    return 0;
-  } else if (min > max) {
-    [min,max] = [max,min];
-  }
-  return Math.floor(Math.random() * (max - min + 1) ) + min;
-};
-const getFloatNumber = (min, max, decimals) => {
-  if (min < 0 || max < 0 || decimals < 0 ||
-    !Number.isFinite(min) || !Number.isFinite(min) || !Number.isFinite(decimals)) {
-    return NaN;
-  } else if (min === 0 && max === 0) {
-    return 0;
-  } else if (min > max) {
-    [min,max] = [max,min];
-  }
-  return +((Math.random() * (max - min)) + min).toFixed(decimals);
-};
-const getRandomArrayElement = (elements) => elements[getRoundInteger(0, elements.length - 1)];
-const createFeature = () => getRandomArrayElement(OFFER_FEATURES_ARRAY);
-const createPhoto = () => getRandomArrayElement(OFFER_PHOTOS_ARRAY);
-const createCard = () => {
-  const latitude = getFloatNumber(35.65000, 35.70000, 5);
-  const longitude = getFloatNumber(139.70000, 139.80000, 5);
-  return {
-    author: {avatar: getAvatar()},
-    offer: {
-      title: getRandomArrayElement(OFFER_TITLES_ARRAY),
-      address: `${latitude}, ${longitude}`,
-      price: `${getRoundInteger(OFFER_PRICE_MIN, OFFER_PRICE_MAX)} млн ₽`,
-      type: getRandomArrayElement(OFFER_TYPE_ARRAY),
-      rooms: `${getRoundInteger(OFFER_ROOMS_MIN, OFFER_ROOMS_MAX)} комнат(ы)`,
-      guests: `Разместятся с комфортом ${getRoundInteger(OFFER_GUESTS_MIN, OFFER_GUESTS_MAX)} человек(а)`,
-      checkin: `${getRandomArrayElement(OFFER_CHECKIN_ARRAY)} время заезда`,
-      checkout: `${getRandomArrayElement(OFFER_CHECKOUT_ARRAY)} время выезда`,
-      features: Array.from({length: getRoundInteger(OFFER_FEATURES_MIN, OFFER_FEATURES_ARRAY.length)}, createFeature),
-      description: ['test'],
-      photos: Array.from({length: getRoundInteger(OFFER_PHOTOS_MIN, OFFER_PHOTOS_MAX)}, createPhoto)
-    },
-    location: {
-      lat: latitude,
-      lng: longitude
-    }};
-};
-*/
+cardsArray();
