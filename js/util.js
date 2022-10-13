@@ -31,7 +31,7 @@ const getFloatNumber = (min, max, decimals) => {
 const getRandomArrayElement = (elements) => elements[getRoundInteger(0, elements.length - 1)];
 
 // Получить массив случайной длины, от 0 до arrayMinLength
-const getRandomArraySlice = (arrayMinLength, array) => array.slice(0, getRoundInteger(arrayMinLength, array.length + 1));
+const getRandomArraySlice = (arrayMinLength, array) => array.slice(0, getRoundInteger(arrayMinLength, array.length));
 
 export {
   getRoundInteger,

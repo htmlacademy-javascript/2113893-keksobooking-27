@@ -3,13 +3,12 @@ import {
   getFloatNumber,
   getRandomArrayElement,
   getRandomArraySlice
-} from 'util.js';
+} from './util.js';
 
 // Количество объявлений
 const CARDS_COUNT = 10;
 
 // Количество цифр в номере аватарки, используется для добавления ведущих нолей, если номер от 1 до 9
-
 const avatarDigits = 2;
 
 // Названия объявлений
@@ -80,7 +79,7 @@ const getAvatar = (index) => `img/avatars/user${index.toString().padStart(avatar
 // Генерим данные для карточки объявления
 const getCard = (index) => {
 
-  // Координаты, высота и долгота
+  // Координаты текущего объявления, высота и долгота
   const latitude = getFloatNumber(35.65000, 35.70000, 5);
   const longitude = getFloatNumber(139.70000, 139.80000, 5);
 
