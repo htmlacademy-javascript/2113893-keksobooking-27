@@ -1,3 +1,3 @@
 import {getCardsArray} from './data.js';
 
-getCardsArray();
+const temp = getCardsArray();

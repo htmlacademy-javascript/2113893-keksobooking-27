@@ -3,13 +3,13 @@ import {
   getFloatNumber,
   getRandomArrayElement,
   getRandomArraySlice
-} from './util.js';
+} from './utils.js';
 
 // Количество объявлений
 const CARDS_COUNT = 10;
 
 // Количество цифр в номере аватарки, используется для добавления ведущих нолей, если номер от 1 до 9
-const avatarDigits = 2;
+const AVATAR_DIGITS = 2;
 
 // Названия объявлений
 const TITLES = ['Прекрасная вилла', 'Жалкая лачуга', 'Квартирка', 'Хоромы', 'Особняк олигарха'];
@@ -21,7 +21,7 @@ const PRICE = {
 };
 
 // Тип жилья
-const TYPE = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
+const TYPES = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
 
 // Число комнат, минимальное и максимальное
 const ROOM = {
@@ -36,7 +36,7 @@ const GUEST = {
 };
 
 // Часы заезда/выезда
-const CHECKIN_TIMES = ['12:00', '13:00', '14:00'];
+const CHECKIN_CHECKOUT_TIMES = ['12:00', '13:00', '14:00'];
 
 // Преимущества и особенности жилья
 const FEATURE = {
@@ -73,9 +73,6 @@ const PHOTO = {
   ],
 };
 
-// Случайная аватарка
-const getAvatar = (index) => `img/avatars/user${index.toString().padStart(avatarDigits, '0')}.png`;
-
 // Генерим данные для карточки объявления
 const getCard = (index) => {
 
@@ -84,16 +81,16 @@ const getCard = (index) => {
   const longitude = getFloatNumber(139.70000, 139.80000, 5);
 
   return {
-    author: {avatar: getAvatar(index)},
+    author: {avatar:  `img/avatars/user${index.toString().padStart(AVATAR_DIGITS, '0')}.png`},
     offer: {
       title: getRandomArrayElement(TITLES),
       address: `${latitude}, ${longitude}`,
       price: getRoundInteger(PRICE.PRICES_MIN, PRICE.PRICES_MAX),
-      type: getRandomArrayElement(TYPE),
+      type: getRandomArrayElement(TYPES),
       rooms: getRoundInteger(ROOM.ROOMS_MIN, ROOM.ROOMS_MAX),
       guests: getRoundInteger(GUEST.GUESTS_MIN, GUEST.GUESTS_MAX),
-      checkin: getRandomArrayElement(CHECKIN_TIMES),
-      checkout: getRandomArrayElement(CHECKIN_TIMES),
+      checkin: getRandomArrayElement(CHECKIN_CHECKOUT_TIMES),
+      checkout: getRandomArrayElement(CHECKIN_CHECKOUT_TIMES),
       features: getRandomArraySlice(FEATURE.FEATURES_MIN, FEATURE.FEATURES),
       description: getRandomArraySlice(DESCRIPTION.DESCRIPTIONS_MIN, DESCRIPTION.DESCRIPTIONS).join(' '),
       photos:  getRandomArraySlice(PHOTO.PHOTOS_MIN, PHOTO.PHOTOS),
@@ -106,6 +103,6 @@ const getCard = (index) => {
 };
 
 // Создаём массив из объявлений
-const getCardsArray = () => Array.from({length: CARDS_COUNT}, (_, avatarIndex) => getCard(avatarIndex + 1));
+const getCardsArray = () => Array.from({length: CARDS_COUNT}, (_, idx) => getCard(idx + 1));
 
 export {getCardsArray};
