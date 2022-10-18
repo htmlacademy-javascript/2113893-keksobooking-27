@@ -21,7 +21,7 @@ const PRICE = {
 };
 
 // Тип жилья
-const TYPES = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
+const TYPE = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
 
 // Число комнат, минимальное и максимальное
 const ROOM = {
@@ -81,19 +81,19 @@ const getCard = (index) => {
   const longitude = getFloatNumber(139.70000, 139.80000, 5);
 
   return {
-    author: {avatar:  `img/avatars/user${index.toString().padStart(AVATAR_DIGITS, '0')}.png`},
+    author: {avatar: `img/avatars/user${index.toString().padStart(AVATAR_DIGITS, '0')}.png`},
     offer: {
       title: getRandomArrayElement(TITLES),
       address: `${latitude}, ${longitude}`,
       price: getRoundInteger(PRICE.PRICES_MIN, PRICE.PRICES_MAX),
-      type: getRandomArrayElement(TYPES),
+      type: getRandomArrayElement(TYPE),
       rooms: getRoundInteger(ROOM.ROOMS_MIN, ROOM.ROOMS_MAX),
       guests: getRoundInteger(GUEST.GUESTS_MIN, GUEST.GUESTS_MAX),
       checkin: getRandomArrayElement(CHECKIN_CHECKOUT_TIMES),
       checkout: getRandomArrayElement(CHECKIN_CHECKOUT_TIMES),
       features: getRandomArraySlice(FEATURE.FEATURES_MIN, FEATURE.FEATURES),
       description: getRandomArraySlice(DESCRIPTION.DESCRIPTIONS_MIN, DESCRIPTION.DESCRIPTIONS).join(' '),
-      photos:  getRandomArraySlice(PHOTO.PHOTOS_MIN, PHOTO.PHOTOS),
+      photos: getRandomArraySlice(PHOTO.PHOTOS_MIN, PHOTO.PHOTOS),
     },
     location: {
       lat: latitude,
@@ -103,6 +103,6 @@ const getCard = (index) => {
 };
 
 // Создаём массив из объявлений
-const getCardsArray = () => Array.from({length: CARDS_COUNT}, (_, idx) => getCard(idx + 1));
+const getCardsArray = () => Array.from({length: CARDS_COUNT}, (_, avatarIndex) => getCard(avatarIndex + 1));
 
 export {getCardsArray};
