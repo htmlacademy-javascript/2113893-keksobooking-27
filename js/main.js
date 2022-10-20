@@ -1,3 +1,9 @@
 import {getCardsArray} from './data.js';
+import {fillFragment} from './popup.js';
 
-getCardsArray();
+const cardsContainer = document.querySelector('#map-canvas');
+
+const popups = getCardsArray();
+const fragment = fillFragment(popups);
+
+cardsContainer.appendChild(fragment.firstChild);
