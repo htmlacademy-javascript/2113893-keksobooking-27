@@ -1,9 +1,12 @@
 import {getCardsArray} from './data.js';
-import {fillFragment} from './popup.js';
+import {renderElement} from './popup.js';
 
-const cardsContainer = document.querySelector('#map-canvas');
+const map = document.querySelector('#map-canvas');
 
-const popups = getCardsArray();
-const fragment = fillFragment(popups);
+// const popupsData = getCardsArray();
 
-cardsContainer.appendChild(fragment.firstChild);
+// popupsData.forEach((value) => {
+//   map.append(renderElement(value));
+// });
+
+map.append(renderElement(getCardsArray()[0]));
