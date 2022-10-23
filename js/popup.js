@@ -26,10 +26,11 @@ const getFeatures = (features, list) => {
 };
 
 // Создаем элементы разметки под фото и присваиваем им адрес фотографий
-const getPhotos = (photos, container, template) => {
+const getPhotos = (photos, container, template, title) => {
   photos.forEach(() => {
     const photo = template.cloneNode(true);
     photo.src = photos;
+    photo.alt = title;
     container.append(photo);
   });
   template.remove();
@@ -102,7 +103,7 @@ const renderElement = ({
   if (photos === undefined) {
     hideNode(element, '.popup__photos');
   } else {
-    getPhotos(photos, photoContainer, templatePhoto);
+    getPhotos(photos, photoContainer, templatePhoto, title);
   }
 
   return (element);
