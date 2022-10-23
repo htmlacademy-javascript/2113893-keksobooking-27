@@ -6,19 +6,19 @@ const deactivateFilters = (formFilters, mapFilters) => {
     fieldset.disabled = true;
   });
   mapFilters.classList.add('map__filters--disabled');
-  mapFilters.querySelectorAll('fieldset').forEach((fieldset) => {
+  mapFilters.querySelectorAll('fieldset, select').forEach((fieldset) => {
     fieldset.disabled = true;
   });
 };
 
 const activateFilters = (formFilters, mapFilters) => {
   formFilters.classList.remove('ad-form--disabled');
-  formFilters.querySelectorAll('fieldset').forEach((fieldset) => {
-    fieldset.disabled = false;
+  formFilters.querySelectorAll('fieldset').forEach((field) => {
+    field.disabled = false;
   });
   mapFilters.classList.remove('map__filters--disabled');
-  mapFilters.querySelectorAll('fieldset').forEach((fieldset) => {
-    fieldset.disabled = false;
+  mapFilters.querySelectorAll('fieldset, select').forEach((field) => {
+    field.disabled = false;
   });
 };
 
