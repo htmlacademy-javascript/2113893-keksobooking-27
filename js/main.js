@@ -3,10 +3,8 @@ import {renderElement} from './popup.js';
 
 const map = document.querySelector('#map-canvas');
 
-// const popupsData = getCardsArray();
+map.append(renderElement(getCardsArray()[0]));
 
-// popupsData.forEach((value) => {
+// getCardsArray().forEach((value) => {
 //   map.append(renderElement(value));
 // });
-
-map.append(renderElement(getCardsArray()[0]));

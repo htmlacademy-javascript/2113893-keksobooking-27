@@ -1,5 +1,13 @@
 // Модуль переноса данных объявления в разметку
 
+const typeEngToRu = {
+  palace: 'Дворец',
+  flat: 'Квартира',
+  house: 'Дом',
+  bungalow: 'Бунгало',
+  hotel: 'Отель',
+};
+
 // Скрываем (визуально) элементы карточки без значений
 const hideNode = (element, className) => {
   element.querySelector(className).classList.add('visually-hidden');
@@ -30,7 +38,7 @@ const getPhotos = (photos, container, template) => {
 // Переносим сгенерированные данные в фрагмент с HTML разметкой
 const renderElement = ({
   author: {avatar},
-  offer: {title, address, price, rooms, guests, checkin, checkout, features, description, photos}
+  offer: {title, address, price, type, rooms, guests, checkin, checkout, features, description, photos}
 }) => {
   const element = document.querySelector('#card').content.querySelector('.popup').cloneNode(true);
 
@@ -56,6 +64,12 @@ const renderElement = ({
     hideNode(element, '.popup__description');
   } else {
     element.querySelector('.popup__description').textContent = description;
+  }
+
+  if (type === undefined) {
+    hideNode(element, '.popup__type');
+  } else {
+    element.querySelector('.popup__type').textContent = typeEngToRu[type];
   }
 
   if (price === undefined) {

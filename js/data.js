@@ -67,16 +67,25 @@ const PHOTO = {
   PHOTOS: [
     'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',
     'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
-    'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'
+    'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg',
   ],
+};
+
+// Диапазоны под координаты жилья, DECIMALS - число знаков после запятой
+const LOCATION = {
+  DECIMALS: 5,
+  LATITUDE_MIN: 35.65000,
+  LATITUDE_MAX: 35.70000,
+  LONGITUDE_MIN: 139.70000,
+  LONGITUDE_MAX: 139.80000,
 };
 
 // Генерим данные для карточки объявления
 const getCard = (index) => {
 
   // Координаты текущего объявления, высота и долгота
-  const latitude = getRandomPositiveFloat(35.65000, 35.70000, 5);
-  const longitude = getRandomPositiveFloat(139.70000, 139.80000, 5);
+  const latitude = getRandomPositiveFloat(LOCATION.LATITUDE_MIN, LOCATION.LATITUDE_MAX, LOCATION.DECIMALS);
+  const longitude = getRandomPositiveFloat(LOCATION.LONGITUDE_MIN, LOCATION.LONGITUDE_MAX, LOCATION.DECIMALS);
 
   return {
     author: {avatar: `img/avatars/user${index.toString().padStart(AVATAR_DIGITS, '0')}.png`},
