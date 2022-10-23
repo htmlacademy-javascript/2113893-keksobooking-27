@@ -6,8 +6,8 @@ const deactivateFilters = (formFilters, mapFilters) => {
     fieldset.disabled = true;
   });
   mapFilters.classList.add('map__filters--disabled');
-  mapFilters.querySelectorAll('fieldset, select').forEach((fieldset) => {
-    fieldset.disabled = true;
+  mapFilters.querySelectorAll('fieldset, select').forEach((field) => {
+    field.disabled = true;
   });
 };
 
