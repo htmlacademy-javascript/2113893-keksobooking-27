@@ -1,6 +1,6 @@
 import {
-  getRoundInteger,
-  getFloatNumber,
+  getRandomPositiveInteger,
+  getRandomPositiveFloat,
   getRandomArrayElement,
   getRandomArraySlice
 } from './utils.js';
@@ -16,8 +16,8 @@ const TITLES = ['Прекрасная вилла', 'Жалкая лачуга', 
 
 // Стоимость генерируемого жилья, минимальная и максимальрная
 const PRICE = {
-  PRICES_MIN: 1,
-  PRICES_MAX: 100,
+  PRICES_MIN: 1000,
+  PRICES_MAX: 10000,
 };
 
 // Тип жилья
@@ -26,13 +26,13 @@ const TYPE = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
 // Число комнат, минимальное и максимальное
 const ROOM = {
   ROOMS_MIN: 1,
-  ROOMS_MAX: 100,
+  ROOMS_MAX: 10,
 };
 
 // Число гостей, минимальное и максимальное
 const GUEST = {
   GUESTS_MIN: 1,
-  GUESTS_MAX: 100,
+  GUESTS_MAX: 20,
 };
 
 // Часы заезда/выезда
@@ -53,11 +53,9 @@ const DESCRIPTION = {
     'Квартира находится на среднем этаже.',
     'В доме чистые подъезды и лифты, добрые соседи.',
     'Выгодная планировка.',
-    'Просторная и уютная лоджия с новыми стеклопакетами, отапливаемая.',
     'Дом в хорошем техническом состоянии, не старый.',
     'Приятный ремонт.',
     'Отдельно обговаривается продажа со всей мебелью.',
-    'Удобное расположение позволит вам использовать все преимущества развитой инфраструктуры.',
     'Я здесь вырос и люблю жильё всей душой.',
     'Очень хорошая энергетика.',
   ],
@@ -69,26 +67,35 @@ const PHOTO = {
   PHOTOS: [
     'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',
     'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
-    'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'
+    'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg',
   ],
+};
+
+// Диапазоны под координаты жилья, DECIMALS - число знаков после запятой
+const LOCATION = {
+  DECIMALS: 5,
+  LATITUDE_MIN: 35.65000,
+  LATITUDE_MAX: 35.70000,
+  LONGITUDE_MIN: 139.70000,
+  LONGITUDE_MAX: 139.80000,
 };
 
 // Генерим данные для карточки объявления
 const getCard = (index) => {
 
   // Координаты текущего объявления, высота и долгота
-  const latitude = getFloatNumber(35.65000, 35.70000, 5);
-  const longitude = getFloatNumber(139.70000, 139.80000, 5);
+  const latitude = getRandomPositiveFloat(LOCATION.LATITUDE_MIN, LOCATION.LATITUDE_MAX, LOCATION.DECIMALS);
+  const longitude = getRandomPositiveFloat(LOCATION.LONGITUDE_MIN, LOCATION.LONGITUDE_MAX, LOCATION.DECIMALS);
 
   return {
     author: {avatar: `img/avatars/user${index.toString().padStart(AVATAR_DIGITS, '0')}.png`},
     offer: {
       title: getRandomArrayElement(TITLES),
       address: `${latitude}, ${longitude}`,
-      price: getRoundInteger(PRICE.PRICES_MIN, PRICE.PRICES_MAX),
+      price: getRandomPositiveInteger(PRICE.PRICES_MIN, PRICE.PRICES_MAX),
       type: getRandomArrayElement(TYPE),
-      rooms: getRoundInteger(ROOM.ROOMS_MIN, ROOM.ROOMS_MAX),
-      guests: getRoundInteger(GUEST.GUESTS_MIN, GUEST.GUESTS_MAX),
+      rooms: getRandomPositiveInteger(ROOM.ROOMS_MIN, ROOM.ROOMS_MAX),
+      guests: getRandomPositiveInteger(GUEST.GUESTS_MIN, GUEST.GUESTS_MAX),
       checkin: getRandomArrayElement(CHECKIN_CHECKOUT_TIMES),
       checkout: getRandomArrayElement(CHECKIN_CHECKOUT_TIMES),
       features: getRandomArraySlice(FEATURE.FEATURES_MIN, FEATURE.FEATURES),

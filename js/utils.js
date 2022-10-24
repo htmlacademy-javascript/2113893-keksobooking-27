@@ -1,5 +1,5 @@
 // Случайное целое число
-const getRoundInteger = (min, max) => {
+const getRandomPositiveInteger = (min, max) => {
   if (min < 0 || max < 0 || !Number.isFinite(min) || !Number.isFinite(min)) {
     return NaN;
   } else if (min === max) {
@@ -13,7 +13,7 @@ const getRoundInteger = (min, max) => {
 };
 
 //Cлучайное дробное число, decimals - число знаков после запятой
-const getFloatNumber = (min, max, decimals) => {
+const getRandomPositiveFloat = (min, max, decimals) => {
   if (min < 0 || max < 0 || decimals < 0 ||
     !Number.isFinite(min) || !Number.isFinite(min) || !Number.isFinite(decimals)) {
     return NaN;
@@ -28,14 +28,14 @@ const getFloatNumber = (min, max, decimals) => {
 };
 
 // Случайный элемент массива
-const getRandomArrayElement = (elements) => elements[getRoundInteger(0, elements.length - 1)];
+const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0, elements.length - 1)];
 
 // Получить массив случайной длины, от 0 до arrayMinLength
-const getRandomArraySlice = (arrayMinLength, array) => array.slice(0, getRoundInteger(arrayMinLength, array.length));
+const getRandomArraySlice = (arrayMinLength, array) => array.slice(0, getRandomPositiveInteger(arrayMinLength, array.length));
 
 export {
-  getRoundInteger,
-  getFloatNumber,
+  getRandomPositiveInteger,
+  getRandomPositiveFloat,
   getRandomArrayElement,
   getRandomArraySlice,
 };
