@@ -16,8 +16,8 @@ const TITLES = ['Прекрасная вилла', 'Жалкая лачуга', 
 
 // Стоимость генерируемого жилья, минимальная и максимальрная
 const PRICE = {
-  PRICES_MIN: 1000,
-  PRICES_MAX: 10000,
+  MIN: 1000,
+  MAX: 10000,
 };
 
 // Тип жилья
@@ -25,14 +25,14 @@ const TYPE = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
 
 // Число комнат, минимальное и максимальное
 const ROOM = {
-  ROOMS_MIN: 1,
-  ROOMS_MAX: 10,
+  MIN: 1,
+  MAX: 10,
 };
 
 // Число гостей, минимальное и максимальное
 const GUEST = {
-  GUESTS_MIN: 1,
-  GUESTS_MAX: 20,
+  MIN: 1,
+  MAX: 20,
 };
 
 // Часы заезда/выезда
@@ -40,13 +40,13 @@ const CHECKIN_CHECKOUT_TIMES = ['12:00', '13:00', '14:00'];
 
 // Преимущества и особенности жилья
 const FEATURE = {
-  FEATURES_MIN: 1,
+  MIN: 1,
   FEATURES: ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'],
 };
 
 // Описание жилья
 const DESCRIPTION = {
-  DESCRIPTIONS_MIN: 1,
+  MIN: 1,
   DESCRIPTIONS: [
     'Жильё оборудовано бытовой техникой.',
     'Просторная спальня, большая кухня.',
@@ -63,7 +63,7 @@ const DESCRIPTION = {
 
 // Фото жилья
 const PHOTO = {
-  PHOTOS_MIN: 1,
+  MIN: 1,
   PHOTOS: [
     'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',
     'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
@@ -92,15 +92,15 @@ const getCard = (index) => {
     offer: {
       title: getRandomArrayElement(TITLES),
       address: `${latitude}, ${longitude}`,
-      price: getRandomPositiveInteger(PRICE.PRICES_MIN, PRICE.PRICES_MAX),
+      price: getRandomPositiveInteger(PRICE.MIN, PRICE.MAX),
       type: getRandomArrayElement(TYPE),
-      rooms: getRandomPositiveInteger(ROOM.ROOMS_MIN, ROOM.ROOMS_MAX),
-      guests: getRandomPositiveInteger(GUEST.GUESTS_MIN, GUEST.GUESTS_MAX),
+      rooms: getRandomPositiveInteger(ROOM.MIN, ROOM.MAX),
+      guests: getRandomPositiveInteger(GUEST.MIN, GUEST.MAX),
       checkin: getRandomArrayElement(CHECKIN_CHECKOUT_TIMES),
       checkout: getRandomArrayElement(CHECKIN_CHECKOUT_TIMES),
-      features: getRandomArraySlice(FEATURE.FEATURES_MIN, FEATURE.FEATURES),
-      description: getRandomArraySlice(DESCRIPTION.DESCRIPTIONS_MIN, DESCRIPTION.DESCRIPTIONS).join(' '),
-      photos: getRandomArraySlice(PHOTO.PHOTOS_MIN, PHOTO.PHOTOS),
+      features: getRandomArraySlice(FEATURE.MIN, FEATURE.FEATURES),
+      description: getRandomArraySlice(DESCRIPTION.MIN, DESCRIPTION.DESCRIPTIONS).join(' '),
+      photos: getRandomArraySlice(PHOTO.MIN, PHOTO.PHOTOS),
     },
     location: {
       lat: latitude,
