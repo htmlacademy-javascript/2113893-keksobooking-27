@@ -69,9 +69,15 @@ numberOfRooms.addEventListener('change', onNumberOfRoomsChange);
 
 Form.addEventListener('submit', (evt) => {
   evt.preventDefault();
-  if (pristine.validate()) {
-    console.log('Можно отправлять');
-    return;
-  }
-  console.log('Форма невалидна');
+  pristine.validate();
 });
+
+/*
+evt.preventDefault();
+if (pristine.validate()) {
+  console.log('Можно отправлять');
+  return;
+}
+console.log('Форма невалидна');
+});
+*/
