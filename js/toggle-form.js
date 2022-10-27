@@ -20,13 +20,13 @@ const toggleFormState = (Form, classToDisableForm, formFilters, classToggle, sta
   });
 };
 
-// Функция блокировки страницы
+// Функция блокировки форм и фильтров
 const deactivateForms = () => {
   toggleFormState(cardForm, cardFormClassToDisable, cardFilters, 'add', true);
   toggleFormState(mapForm, mapFormClassToDisable, mapFilters, 'add', true);
 };
 
-// Функция активации страницы
+// Функция активации форм и фильтров
 const activateForms = () => {
   toggleFormState(cardForm, cardFormClassToDisable, cardFilters, 'remove', false);
   toggleFormState(mapForm, mapFormClassToDisable, mapFilters, 'remove', false);
