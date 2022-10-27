@@ -12,7 +12,7 @@ const mapFormClassToDisable = 'map__filters--disabled';
 const cardFilters = cardForm.querySelectorAll('fieldset, select');
 const mapFilters = mapForm.querySelectorAll('fieldset, select');
 
-// Функция переключения состояния формы
+// Функция переключения состояния
 const toggleFormState = (Form, classToDisableForm, formFilters, classToggle, state) => {
   Form.classList[classToggle](classToDisableForm); // блокируем форму для мыши
   formFilters.forEach((field) => { // блокируем поля формы для клавиатуры

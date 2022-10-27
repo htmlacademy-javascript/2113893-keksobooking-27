@@ -56,13 +56,13 @@ pristine.addValidator(
 );
 
 const onCapacityChange = () => {
-  pristine.validate(capacity);
+  pristine.validate();
 };
 
 capacity.addEventListener('change', onCapacityChange);
 
 const onNumberOfRoomsChange = () => {
-  pristine.validate(capacity);
+  pristine.validate();
 };
 
 numberOfRooms.addEventListener('change', onNumberOfRoomsChange);
