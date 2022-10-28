@@ -1,6 +1,6 @@
 // Модуль переноса данных объявления в разметку
 
-const typeEngToRu = {
+const TYPE_ENG_TO_RU = {
   palace: 'Дворец',
   flat: 'Квартира',
   house: 'Дом',
@@ -8,9 +8,18 @@ const typeEngToRu = {
   hotel: 'Отель',
 };
 
-// Скрываем (визуально) элементы карточки без значений
+// Скрываем (визуально) узлы без значений
 const hideNode = (element, className) => {
   element.querySelector(className).classList.add('visually-hidden');
+};
+
+// Присваиваем значение узлу попапа или скрываем узел
+const processPopupElement = (element, className, elementProperty, value) => {
+  if (value === undefined) {
+    element.querySelector(className).classList.add('visually-hidden');
+    return;
+  }
+  element.querySelector(className)[elementProperty] = value;
 };
 
 // Убираем ненужные иконки особенностей жилья
@@ -25,88 +34,49 @@ const getFeatures = (features, list) => {
   });
 };
 
-// Создаем элементы разметки под фото и присваиваем им адрес фотографий
-const getPhotos = (photos, container, template, title) => {
+// Создаем узлы под фото и присваиваем им адрес фотографий
+const getPhotos = (photos, container, template, alt) => {
   photos.forEach(() => {
     const photo = template.cloneNode(true);
     photo.src = photos;
-    photo.alt = title;
+    photo.alt = alt;
     container.append(photo);
   });
   template.remove();
 };
 
-// Переносим сгенерированные данные в фрагмент с HTML разметкой
-const renderElement = ({
+// Переносим сгенерированные данные во фрагмент с HTML разметкой
+const renderPopup = ({
   author: {avatar},
   offer: {title, address, price, type, rooms, guests, checkin, checkout, features, description, photos}
 }) => {
-  const element = document.querySelector('#card').content.querySelector('.popup').cloneNode(true);
+  const popup = document.querySelector('#card').content.querySelector('.popup').cloneNode(true);
 
-  if (avatar === undefined) {
-    hideNode(element, '.popup__avatar');
-  } else {
-    element.querySelector('.popup__avatar').src = avatar;
-  }
+  processPopupElement(popup, '.popup__avatar', 'src', avatar);
+  processPopupElement(popup, '.popup__title', 'textContent', title);
+  processPopupElement(popup, '.popup__text--address', 'textContent', address);
+  processPopupElement(popup, '.popup__description', 'textContent', description);
+  processPopupElement(popup, '.popup__type', 'textContent', TYPE_ENG_TO_RU[type]);
+  processPopupElement(popup, '.popup__text--price', 'textContent', `${price} ₽/ночь`);
+  processPopupElement(popup, '.popup__text--capacity', 'textContent', `${rooms} комнаты для ${guests} гостей`);
+  processPopupElement(popup, '.popup__text--time', 'textContent', `Заезд после ${checkin}, выезд до ${checkout}`);
 
-  if (title === undefined) {
-    hideNode(element, '.popup__title');
-  } else {
-    element.querySelector('.popup__title').textContent = title;
-  }
-
-  if (address === undefined) {
-    hideNode(element, '.popup__text--address');
-  } else {
-    element.querySelector('.popup__text--address').textContent = address;
-  }
-
-  if (description === undefined) {
-    hideNode(element, '.popup__description');
-  } else {
-    element.querySelector('.popup__description').textContent = description;
-  }
-
-  if (type === undefined) {
-    hideNode(element, '.popup__type');
-  } else {
-    element.querySelector('.popup__type').textContent = typeEngToRu[type];
-  }
-
-  if (price === undefined) {
-    hideNode(element, '.popup__text--price');
-  } else {
-    element.querySelector('.popup__text--price').textContent = `${price} ₽/ночь`;
-  }
-
-  if (rooms === undefined || guests === undefined) {
-    hideNode(element, '.popup__text--capacity');
-  } else {
-    element.querySelector('.popup__text--capacity').textContent = `${rooms} комнаты для ${guests} гостей`;
-  }
-
-  if (checkin === undefined || checkout === undefined) {
-    hideNode(element, '.popup__text--time');
-  } else {
-    element.querySelector('.popup__text--time').textContent = `Заезд после ${checkin}, выезд до ${checkout}`;
-  }
-
-  const featureList = element.querySelector('.popup__features').querySelectorAll('.popup__feature');
+  const featureList = popup.querySelector('.popup__features').querySelectorAll('.popup__feature');
   if (features === undefined) {
-    hideNode(element, '.popup__features');
-  } else {
-    getFeatures(features, featureList);
+    hideNode(popup, '.popup__features');
+    return;
   }
+  getFeatures(features, featureList);
 
-  const photoContainer = element.querySelector('.popup__photos');
-  const templatePhoto = element.querySelector('.popup__photo');
+  const photoContainer = popup.querySelector('.popup__photos');
+  const templatePhoto = popup.querySelector('.popup__photo');
   if (photos === undefined) {
-    hideNode(element, '.popup__photos');
-  } else {
-    getPhotos(photos, photoContainer, templatePhoto, title);
+    hideNode(popup, '.popup__photos');
+    return;
   }
+  getPhotos(photos, photoContainer, templatePhoto, title);
 
-  return (element);
+  return (popup);
 };
 
-export {renderElement};
+export {renderPopup};
