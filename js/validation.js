@@ -1,15 +1,15 @@
 // Модуль валидации объявления
 
-const form = document.querySelector('.ad-form');
-const estatePrice = form.querySelector('#price');
-const estateTitle = form.querySelector('#title');
-const estateRooms = form.querySelector('#room_number');
-const estateCapacity = form.querySelector('#capacity');
-const timeCheckIn = form.querySelector('#timein');
-const timeCheckOut = form.querySelector('#timeout');
-const estateType = form.querySelector('#type');
+const estateForm = document.querySelector('.ad-form');
+const estatePrice = estateForm.querySelector('#price');
+const estateTitle = estateForm.querySelector('#title');
+const estateRooms = estateForm.querySelector('#room_number');
+const estateCapacity = estateForm.querySelector('#capacity');
+const estateCheckIn = estateForm.querySelector('#timein');
+const estateCheckOut = estateForm.querySelector('#timeout');
+const estateType = estateForm.querySelector('#type');
 
-const pristine = new Pristine(form, {
+const pristine = new Pristine(estateForm, {
   classTo: 'ad-form__element',
   errorClass: 'ad-form__element--invalid',
   successClass: 'ad-form__element--valid',
@@ -28,31 +28,79 @@ pristine.addValidator(
 );
 
 // Проверяем поле цены за ночь
-const validatePrice = (value) => value >= 0 && value <= 100000;
+const validatePrice = (value) => {
+  if (estateType.value === 'bungalow') {
+    return value >= 0 && value <= 100000;
+  }
+  if (estateType.value === 'flat') {
+    return value >= 1000 && value <= 100000;
+  }
+  if (estateType.value === 'hotel') {
+    return value >= 3000 && value <= 100000;
+  }
+  if (estateType.value === 'house') {
+    return value >= 5000 && value <= 100000;
+  }
+  if (estateType.value === 'palace') {
+    return value >= 10000 && value <= 100000;
+  }
+};
 
+// Формируем сообщение об ошибке цены за ночь
+const getPriceErrorMessage = () => {
+  if (estateType.value === 'bungalow') {
+    return 'Укажите цену от 0 до 100 000';
+  }
+  if (estateType.value === 'flat') {
+    return 'Укажите цену от 1 000 до 100 000';
+  }
+  if (estateType.value === 'hotel') {
+    return 'Укажите цену от 3 000 до 100 000';
+  }
+  if (estateType.value === 'house') {
+    return 'Укажите цену от 5 000 до 100 000';
+  }
+  if (estateType.value === 'palace') {
+    return 'Укажите цену от 10 000 до 100 000';
+  }
+};
+
+// Добавляем проверку цены в валидатор
 pristine.addValidator(
   estatePrice,
   validatePrice,
-  'Максимум 100 000'
+  getPriceErrorMessage,
 );
 
 // Синхронизируем поля «Время заезда» и «Время выезда»
 const onCheckInChange = () => {
-  timeCheckOut.value = timeCheckIn.value;
+  estateCheckOut.value = estateCheckIn.value;
 };
 
-timeCheckIn.addEventListener('change', onCheckInChange);
+estateCheckIn.addEventListener('change', onCheckInChange);
 
 const onCheckOutChange = () => {
-  timeCheckIn.value = timeCheckOut.value;
+  estateCheckIn.value = estateCheckOut.value;
 };
 
-timeCheckOut.addEventListener('change', onCheckOutChange);
+estateCheckOut.addEventListener('change', onCheckOutChange);
 
 // Добавляем влияние типа жилья на стоимость
-const onEstateTypeChange = (type) => {
-  if (type === 'bungalow') {
+const onEstateTypeChange = () => {
+  if (estateType.value === 'bungalow') {
     estatePrice.placeholder = 0;
+  }
+  if (estateType.value === 'flat') {
+    estatePrice.placeholder = 1000;
+  }
+  if (estateType.value === 'hotel') {
+    estatePrice.placeholder = 3000;
+  }
+  if (estateType.value === 'house') {
+    estatePrice.placeholder = 5000;
+  }
+  if (estateType.value === 'palace') {
+    estatePrice.placeholder = 10000;
   }
 };
 
@@ -91,7 +139,7 @@ estateCapacity.addEventListener('change', pristine.validate());
 estateRooms.addEventListener('change', pristine.validate());
 
 // Проверяем форму вместо отправки
-form.addEventListener('submit', (evt) => {
+estateForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
   pristine.validate();
 });
