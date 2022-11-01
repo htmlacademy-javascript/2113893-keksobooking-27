@@ -1,150 +1,120 @@
 // Модуль валидации объявления
 
-const estateForm = document.querySelector('.ad-form');
-const estatePrice = estateForm.querySelector('#price');
-const estateTitle = estateForm.querySelector('#title');
-const estateRooms = estateForm.querySelector('#room_number');
-const estateCapacity = estateForm.querySelector('#capacity');
-const estateCheckIn = estateForm.querySelector('#timein');
-const estateCheckOut = estateForm.querySelector('#timeout');
-const estateType = estateForm.querySelector('#type');
+const formNode = document.querySelector('.ad-form');
+const titleNode = formNode.querySelector('#title');
+const typeNode = formNode.querySelector('#type');
+const priceNode = formNode.querySelector('#price');
+const roomsNode = formNode.querySelector('#room_number');
+const capacityNode = formNode.querySelector('#capacity');
+const checkInNode = formNode.querySelector('#timein');
+const checkOutNode = formNode.querySelector('#timeout');
 
-const pristine = new Pristine(estateForm, {
-  classTo: 'ad-form__element',
-  errorClass: 'ad-form__element--invalid',
-  successClass: 'ad-form__element--valid',
-  errorTextParent: 'ad-form__element',
-  errorTextTag: 'span',
-  errorTextClass: 'ad-form__error-text',
-});
+const TITLE = {
+  LENGTH_MIN: 30,
+  LENGTH_MAX: 100,
+};
+
+const PRICE = {
+  MIN: {
+    bungalow: 0,
+    flat: 1000,
+    hotel: 3000,
+    house: 5000,
+    palace: 10000,
+  },
+  MAX: 100000,
+};
+
+const ROOMS = {
+  MIN: '0',
+  MAX: '100',
+};
+
+const CAPACITY_NULL = '0';
+
+const pristine = new Pristine(
+  formNode,
+  {
+    classTo: 'ad-form__element',
+    errorClass: 'ad-form__element--invalid',
+    errorTextParent: 'ad-form__element',
+  },
+  true
+);
 
 // Проверяем поле с заголовком объявления
-const validateTitle = (value) => value.length >= 30 && value.length <= 100;
+const validateTitle = (value) => value.length >= TITLE.LENGTH_MIN && value.length <= TITLE.LENGTH_MAX;
 
-pristine.addValidator(
-  estateTitle,
-  validateTitle,
-  'Укажите заголовок длиной от 30 до 100 символов',
-);
+const getTitleErrorMessage = () => `Укажите заголовок длиной от ${TITLE.LENGTH_MIN} до ${TITLE.LENGTH_MAX} символов`;
+
+// Добавляем влияние типа жилья на placeholder цены за ночь
+const onTypeChange = () => {
+  priceNode.placeholder = PRICE.MIN[typeNode.value];
+  pristine.validate(priceNode);
+};
 
 // Проверяем поле цены за ночь
-const validatePrice = (value) => {
-  if (estateType.value === 'bungalow') {
-    return value >= 0 && value <= 100000;
-  }
-  if (estateType.value === 'flat') {
-    return value >= 1000 && value <= 100000;
-  }
-  if (estateType.value === 'hotel') {
-    return value >= 3000 && value <= 100000;
-  }
-  if (estateType.value === 'house') {
-    return value >= 5000 && value <= 100000;
-  }
-  if (estateType.value === 'palace') {
-    return value >= 10000 && value <= 100000;
-  }
-};
+const validatePrice = (value) => value >= PRICE.MIN[typeNode.value] && value <= PRICE.MAX;
 
-// Формируем сообщение об ошибке цены за ночь
-const getPriceErrorMessage = () => {
-  if (estateType.value === 'bungalow') {
-    return 'Укажите цену от 0 до 100 000';
-  }
-  if (estateType.value === 'flat') {
-    return 'Укажите цену от 1 000 до 100 000';
-  }
-  if (estateType.value === 'hotel') {
-    return 'Укажите цену от 3 000 до 100 000';
-  }
-  if (estateType.value === 'house') {
-    return 'Укажите цену от 5 000 до 100 000';
-  }
-  if (estateType.value === 'palace') {
-    return 'Укажите цену от 10 000 до 100 000';
-  }
-};
-
-// Добавляем проверку цены в валидатор
-pristine.addValidator(
-  estatePrice,
-  validatePrice,
-  getPriceErrorMessage,
-);
+const getPriceErrorMessage = () => `Укажите цену от ${PRICE.MIN[typeNode.value]} до ${PRICE.MAX}`;
 
 // Синхронизируем поля «Время заезда» и «Время выезда»
 const onCheckInChange = () => {
-  estateCheckOut.value = estateCheckIn.value;
+  checkOutNode.value = checkInNode.value;
 };
-
-estateCheckIn.addEventListener('change', onCheckInChange);
-
 const onCheckOutChange = () => {
-  estateCheckIn.value = estateCheckOut.value;
+  checkInNode.value = checkOutNode.value;
 };
 
-estateCheckOut.addEventListener('change', onCheckOutChange);
+// Проверка количества комнат
+const validateRooms = () => roomsNode.value === ROOMS.MAX ? capacityNode.value === CAPACITY_NULL : Number(roomsNode.value) >= Number(capacityNode.value);
 
-// Добавляем влияние типа жилья на стоимость
-const onEstateTypeChange = () => {
-  if (estateType.value === 'bungalow') {
-    estatePrice.placeholder = 0;
-  }
-  if (estateType.value === 'flat') {
-    estatePrice.placeholder = 1000;
-  }
-  if (estateType.value === 'hotel') {
-    estatePrice.placeholder = 3000;
-  }
-  if (estateType.value === 'house') {
-    estatePrice.placeholder = 5000;
-  }
-  if (estateType.value === 'palace') {
-    estatePrice.placeholder = 10000;
-  }
-};
-
-estateType.addEventListener('change', onEstateTypeChange);
-
-// Проверяем выбор числа гостей и комнат
-const validateCapacityAndRooms = () => {
-  if (estateRooms.value === '100') {
-    return estateCapacity.value === '0';
-  }
-  if (estateCapacity.value === '0') {
-    return estateRooms.value === '100';
-  }
-  return estateRooms.value >= estateCapacity.value;
-};
-
-// Собираем сообщение об ошибке в числе комнат и/или числа гостей
-const getCapacityAndRoomsErrorMessage = () => {
-  if (estateRooms.value === '100' && estateCapacity.value !== '0') {
+const getRoomsErrorMessage = () => {
+  if (roomsNode.value === ROOMS.MAX && capacityNode.value !== CAPACITY_NULL) {
     return 'Выберите вариант "не для гостей"';
   }
-  if (estateCapacity.value === '0' && estateRooms.value !== '100') {
-    return 'Выберите вариант "100 комнат"';
-  }
-  return `Для ${estateCapacity.value} гостей выберите ${estateCapacity.value} комнаты`;
 };
 
-pristine.addValidator(
-  estateCapacity,
-  validateCapacityAndRooms,
-  getCapacityAndRoomsErrorMessage,
-);
+// Проверка количества гостей
+const validateCapacity = () => capacityNode.value === CAPACITY_NULL ? roomsNode.value === ROOMS.MAX : Number(roomsNode.value) >= Number(capacityNode.value);
 
-// Добавляем проверку при изменении значений числа гостей и комнат
-estateCapacity.addEventListener('change', pristine.validate());
-estateRooms.addEventListener('change', pristine.validate());
+const getCapacityErrorMessage = () => capacityNode.value === CAPACITY_NULL && roomsNode.value !== ROOMS.MAX ? 'Выберите вариант "100 комнат"' : 'Добавьте комнат';
+
+// Синхронизируем проверку количества комнат и гостей
+const onRoomsandCapacityChange = () => {
+  pristine.validate(roomsNode);
+  pristine.validate(capacityNode);
+};
+
+
+// Объединяем проверку полей в единую функцию
+const validateEstateForm = () => {
+  pristine.addValidator(titleNode, validateTitle, getTitleErrorMessage);
+  pristine.addValidator(priceNode, validatePrice, getPriceErrorMessage);
+  pristine.addValidator(roomsNode, validateRooms, getRoomsErrorMessage);
+  pristine.addValidator(capacityNode, validateCapacity, getCapacityErrorMessage);
+
+
+  typeNode.addEventListener('change', onTypeChange);
+  capacityNode.addEventListener('change', onRoomsandCapacityChange);
+  roomsNode.addEventListener('change', onRoomsandCapacityChange);
+  checkInNode.addEventListener('change', onCheckInChange);
+  checkOutNode.addEventListener('change', onCheckOutChange);
+
+  pristine.validate();
+};
 
 // Проверяем форму вместо отправки
-estateForm.addEventListener('submit', (evt) => {
+formNode.addEventListener('submit', (evt) => {
   evt.preventDefault();
   pristine.validate();
 });
 
-/*
+export {
+  validateEstateForm,
+};
+
+/* блок для отрисовки сообщений результатов отправки формы, на будущее
 evt.preventDefault();
 if (pristine.validate()) {
   console.log('Можно отправлять');
