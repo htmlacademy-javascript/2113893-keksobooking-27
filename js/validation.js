@@ -58,6 +58,8 @@ const validatePrice = (value) => value >= PRICE.MIN[typeNode.value] && value <= 
 
 const getPriceErrorMessage = () => `Укажите цену от ${PRICE.MIN[typeNode.value]} до ${PRICE.MAX}`;
 
+const onPriceChange = () => pristine.validate(priceNode);
+
 // Синхронизируем поля «Время заезда» и «Время выезда»
 const onCheckInChange = () => {
   checkOutNode.value = checkInNode.value;
@@ -94,7 +96,7 @@ const validateEstateForm = () => {
   pristine.addValidator(roomsNode, validateRooms, getRoomsErrorMessage);
   pristine.addValidator(capacityNode, validateCapacity, getCapacityErrorMessage);
 
-
+  priceNode.addEventListener('change', onPriceChange);
   typeNode.addEventListener('change', onTypeChange);
   capacityNode.addEventListener('change', onRoomsandCapacityChange);
   roomsNode.addEventListener('change', onRoomsandCapacityChange);
@@ -112,6 +114,9 @@ formNode.addEventListener('submit', (evt) => {
 
 export {
   validateEstateForm,
+  pristine,
+  priceNode,
+  formNode,
 };
 
 /* блок для отрисовки сообщений результатов отправки формы, на будущее

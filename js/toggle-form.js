@@ -1,16 +1,16 @@
 // Модуль переключения форм страницы - активное и заблокированное состояние
 
 // Формы для блокировки (при обращении через мышь)
-const cardForm = document.querySelector('.ad-form');
-const mapForm = document.querySelector('.map__filters');
+const cardFormNode = document.querySelector('.ad-form');
+const mapFormNode = document.querySelector('.map__filters');
 
 // Классы для блокировки форм
 const cardFormClassToDisable = 'ad-form--disabled';
 const mapFormClassToDisable = 'map__filters--disabled';
 
 // Поля для блокировки (при обращении через клавиатуру)
-const cardFilters = cardForm.querySelectorAll('fieldset, select');
-const mapFilters = mapForm.querySelectorAll('fieldset, select');
+const cardFilters = cardFormNode.querySelectorAll('fieldset, select');
+const mapFilters = mapFormNode.querySelectorAll('fieldset, select');
 
 // Функция переключения состояния
 const toggleFormState = (Form, classToDisableForm, formFilters, classToggle, state) => {
@@ -22,14 +22,14 @@ const toggleFormState = (Form, classToDisableForm, formFilters, classToggle, sta
 
 // Функция блокировки форм и фильтров
 const deactivateForms = () => {
-  toggleFormState(cardForm, cardFormClassToDisable, cardFilters, 'add', true);
-  toggleFormState(mapForm, mapFormClassToDisable, mapFilters, 'add', true);
+  toggleFormState(cardFormNode, cardFormClassToDisable, cardFilters, 'add', true);
+  toggleFormState(mapFormNode, mapFormClassToDisable, mapFilters, 'add', true);
 };
 
 // Функция активации форм и фильтров
 const activateForms = () => {
-  toggleFormState(cardForm, cardFormClassToDisable, cardFilters, 'remove', false);
-  toggleFormState(mapForm, mapFormClassToDisable, mapFilters, 'remove', false);
+  toggleFormState(cardFormNode, cardFormClassToDisable, cardFilters, 'remove', false);
+  toggleFormState(mapFormNode, mapFormClassToDisable, mapFilters, 'remove', false);
 };
 
 export {deactivateForms, activateForms};
