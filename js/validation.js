@@ -25,12 +25,16 @@ const PRICE = {
   MAX: 100000,
 };
 
-const ROOMS = {
-  MIN: '0',
-  MAX: '100',
+const ROOMS_MAX = 100;
+
+const CAPACITY_TO_ROOMS_MATCH = {
+  0: ['100'],
+  1: ['1', '2', '3'],
+  2: ['2', '3'],
+  3: ['3'],
 };
 
-const CAPACITY_NULL = '0';
+const CAPACITY_ZERO = '0';
 
 const pristine = new Pristine(
   formNode,
@@ -61,26 +65,21 @@ const getPriceErrorMessage = () => `Укажите цену от ${PRICE.MIN[typ
 const onPriceChange = () => pristine.validate(priceNode);
 
 // Синхронизируем поля «Время заезда» и «Время выезда»
-const onCheckInChange = () => {
-  checkOutNode.value = checkInNode.value;
-};
-const onCheckOutChange = () => {
-  checkInNode.value = checkOutNode.value;
+
+const synch2Nodes = (Node1, Node2) => {
+  Node1.onchange = () => {Node2.value = Node1.value;};
 };
 
-// Проверка количества комнат
-const validateRooms = () => roomsNode.value === ROOMS.MAX ? capacityNode.value === CAPACITY_NULL : Number(roomsNode.value) >= Number(capacityNode.value);
+// Проверка количества комнат и гостей
+const validateRoomsAndCapacity = () => CAPACITY_TO_ROOMS_MATCH[capacityNode.value].includes(roomsNode.value);
 
 const getRoomsErrorMessage = () => {
-  if (roomsNode.value === ROOMS.MAX && capacityNode.value !== CAPACITY_NULL) {
+  if (Number(roomsNode.value) === ROOMS_MAX && capacityNode.value !== CAPACITY_ZERO) {
     return 'Выберите вариант "не для гостей"';
   }
 };
 
-// Проверка количества гостей
-const validateCapacity = () => capacityNode.value === CAPACITY_NULL ? roomsNode.value === ROOMS.MAX : Number(roomsNode.value) >= Number(capacityNode.value);
-
-const getCapacityErrorMessage = () => capacityNode.value === CAPACITY_NULL && roomsNode.value !== ROOMS.MAX ? 'Выберите вариант "100 комнат"' : 'Добавьте комнат';
+const getCapacityErrorMessage = () => capacityNode.value === CAPACITY_ZERO && Number(roomsNode.value) !== ROOMS_MAX ? 'Выберите вариант "100 комнат"' : 'Добавьте комнат';
 
 // Синхронизируем проверку количества комнат и гостей
 const onRoomsandCapacityChange = () => {
@@ -88,29 +87,22 @@ const onRoomsandCapacityChange = () => {
   pristine.validate(capacityNode);
 };
 
-
 // Объединяем проверку полей в единую функцию
 const validateEstateForm = () => {
   pristine.addValidator(titleNode, validateTitle, getTitleErrorMessage);
   pristine.addValidator(priceNode, validatePrice, getPriceErrorMessage);
-  pristine.addValidator(roomsNode, validateRooms, getRoomsErrorMessage);
-  pristine.addValidator(capacityNode, validateCapacity, getCapacityErrorMessage);
+  pristine.addValidator(roomsNode, validateRoomsAndCapacity, getRoomsErrorMessage);
+  pristine.addValidator(capacityNode, validateRoomsAndCapacity, getCapacityErrorMessage);
 
   priceNode.addEventListener('change', onPriceChange);
   typeNode.addEventListener('change', onTypeChange);
   capacityNode.addEventListener('change', onRoomsandCapacityChange);
   roomsNode.addEventListener('change', onRoomsandCapacityChange);
-  checkInNode.addEventListener('change', onCheckInChange);
-  checkOutNode.addEventListener('change', onCheckOutChange);
+  checkInNode.addEventListener('change', synch2Nodes(checkInNode, checkOutNode));
+  checkOutNode.addEventListener('change', synch2Nodes(checkOutNode, checkInNode));
 
   pristine.validate();
 };
-
-// Проверяем форму вместо отправки
-formNode.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  pristine.validate();
-});
 
 export {
   validateEstateForm,
@@ -118,13 +110,3 @@ export {
   priceNode,
   formNode,
 };
-
-/* блок для отрисовки сообщений результатов отправки формы, на будущее
-evt.preventDefault();
-if (pristine.validate()) {
-  console.log('Можно отправлять');
-  return;
-}
-console.log('Форма невалидна');
-});
-*/

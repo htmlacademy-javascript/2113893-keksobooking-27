@@ -1,5 +1,12 @@
 // Модуль переноса данных объявления в разметку
 
+import {getDeclension} from './utils.js';
+
+const DECLENSIONS = {
+  GUESTS: ['гостя', 'гостей', 'гостей'],
+  ROOMS: ['комната', 'комнаты', 'комнат'],
+};
+
 const TYPE_ENG_TO_RU = {
   palace: 'Дворец',
   flat: 'Квартира',
@@ -9,17 +16,17 @@ const TYPE_ENG_TO_RU = {
 };
 
 // Скрываем (визуально) узлы без значений
-const hideNode = (element, className) => {
-  element.querySelector(className).classList.add('visually-hidden');
+const hideNode = (node, className) => {
+  node.querySelector(className).classList.add('visually-hidden');
 };
 
 // Присваиваем значение узлу попапа или скрываем узел
-const processPopupElement = (element, className, elementProperty, value) => {
+const processPopupNode = (node, className, nodeProperty, value) => {
   if (value === undefined) {
-    element.querySelector(className).classList.add('visually-hidden');
+    node.querySelector(className).classList.add('visually-hidden');
     return;
   }
-  element.querySelector(className)[elementProperty] = value;
+  node.querySelector(className)[nodeProperty] = value;
 };
 
 // Убираем ненужные иконки особенностей жилья
@@ -52,14 +59,14 @@ const renderPopup = ({
 }) => {
   const popup = document.querySelector('#card').content.querySelector('.popup').cloneNode(true);
 
-  processPopupElement(popup, '.popup__avatar', 'src', avatar);
-  processPopupElement(popup, '.popup__title', 'textContent', title);
-  processPopupElement(popup, '.popup__text--address', 'textContent', address);
-  processPopupElement(popup, '.popup__description', 'textContent', description);
-  processPopupElement(popup, '.popup__type', 'textContent', TYPE_ENG_TO_RU[type]);
-  processPopupElement(popup, '.popup__text--price', 'textContent', `${price} ₽/ночь`);
-  processPopupElement(popup, '.popup__text--capacity', 'textContent', `${rooms} комнаты для ${guests} гостей`);
-  processPopupElement(popup, '.popup__text--time', 'textContent', `Заезд после ${checkin}, выезд до ${checkout}`);
+  processPopupNode(popup, '.popup__avatar', 'src', avatar);
+  processPopupNode(popup, '.popup__title', 'textContent', title);
+  processPopupNode(popup, '.popup__text--address', 'textContent', address);
+  processPopupNode(popup, '.popup__description', 'textContent', description);
+  processPopupNode(popup, '.popup__type', 'textContent', TYPE_ENG_TO_RU[type]);
+  processPopupNode(popup, '.popup__text--price', 'textContent', `${price} ₽/ночь`);
+  processPopupNode(popup, '.popup__text--capacity', 'textContent', `${rooms} ${getDeclension(rooms, DECLENSIONS.ROOMS)} для ${guests} ${getDeclension(guests, DECLENSIONS.GUESTS)}`);
+  processPopupNode(popup, '.popup__text--time', 'textContent', `Заезд после ${checkin}, выезд до ${checkout}`);
 
   const featureList = popup.querySelector('.popup__features').querySelectorAll('.popup__feature');
   if (features === undefined) {

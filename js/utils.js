@@ -33,9 +33,26 @@ const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0,
 // Получить массив случайной длины, от 0 до arrayMinLength
 const getRandomArraySlice = (arrayMinLength, array) => array.slice(0, getRandomPositiveInteger(arrayMinLength, array.length));
 
+// Получить склонение слова
+const getDeclension = (number, declensions) => {
+  number = Math.abs(number) % 100;
+  const n = number % 10;
+  if (number > 10 && number < 20) {
+    return declensions[2];
+  }
+  if (n > 1 && n < 5) {
+    return declensions[1];
+  }
+  if (n === 1) {
+    return declensions[0];
+  }
+  return declensions[2];
+};
+
 export {
   getRandomPositiveInteger,
   getRandomPositiveFloat,
   getRandomArrayElement,
   getRandomArraySlice,
+  getDeclension,
 };

@@ -3,55 +3,77 @@
 import {getCardsArray} from './data.js';
 import {renderPopup} from './popup.js';
 import {activateForms} from './toggle-form.js';
-import {formNode} from './validation.js';
 
 const addressNode = document.querySelector('#address');
+const mapContainer = document.querySelector('#map-canvas');
 
-// Активируем форму и фильтры при загрузке карты, добавляем слой с картой openstreetmap
-const map = L.map('map-canvas')
-  .on('load', () => activateForms())
-  .setView({
-    lat: 35.68,
-    lng: 139.75,
-  }, 13);
+// Настройки карты
+const MAP = {
+  CENTER: {
+    LAT: 35.68,
+    LNG: 139.75,
+  },
+  SCALE : 13,
+  TILE: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  ATTRIBUTION: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+};
 
+// Настройки меток
+const PINS = {
+  DEFAULT: {
+    URL: './img/pin.svg',
+    SIZE: 30,
+  },
+  FORM: {
+    URL: './img/main-pin.svg',
+    SIZE: 40,
+  },
+  ANCHOR_DIVIDER: 2,
+};
+
+// Активируем форму и фильтры при загрузке карты
+const map = L.map(mapContainer).setView({
+  lat: MAP.CENTER.LAT,
+  lng: MAP.CENTER.LNG
+}, MAP.SCALE);
+
+// Добавляем слой с картой openstreetmap
 L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  MAP.TILE,
   {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    attribution: MAP.ATTRIBUTION,
   },
 ).addTo(map);
 
-// Основной пин
-const mainPinIcon = L.icon({
-  iconUrl: './img/main-pin.svg',
-  iconSize: [52, 52],
-  iconAnchor: [26, 52],
+// Функция инициализации иконки маркера
+const initMarkerIcon = (url, size, divider) => L.icon({
+  iconUrl: url,
+  iconSize: [size, size],
+  iconAnchor: [size / divider, size],
 });
 
-// добавляем возможность перетаскивать основной пин, позиционируем
-const mainPinMarker = L.marker(
+// Иконка метки для формы
+const formPinIcon = initMarkerIcon(PINS.FORM.URL, PINS.FORM.SIZE, PINS.ANCHOR_DIVIDER);
+
+// Добавляем возможность перетаскивать, позиционируем
+const formPinMarker = L.marker(
   {
-    lat: getCardsArray()[0].location.lat,
-    lng: getCardsArray()[0].location.lng,
+    lat: MAP.CENTER.LAT,
+    lng: MAP.CENTER.LNG,
   },
   {
     draggable: true,
-    icon: mainPinIcon,
+    icon: formPinIcon,
   },
 );
 
-// Добавляем основной пин на карту
-mainPinMarker.addTo(map);
+// Создаём слой для меток объявлений
+const markerGroup = L.layerGroup().addTo(map);
 
-// Простой пин
-const pinIcon = L.icon({
-  iconUrl: './img/pin.svg',
-  iconSize: [40, 40],
-  iconAnchor: [20, 40],
-});
+// Простая метка
+const pinIcon = initMarkerIcon(PINS.DEFAULT.URL, PINS.DEFAULT.SIZE, PINS.ANCHOR_DIVIDER);
 
-// Для каждого объявления, добавляем пин на карту и наполняем попап
+// Функция добавления метки и наполнения попапа
 const createMarker = (card) => {
   const marker = L.marker(
     {
@@ -64,26 +86,37 @@ const createMarker = (card) => {
   );
 
   marker
-    .addTo(map)
+    .addTo(markerGroup)
     .bindPopup(renderPopup(card));
 };
-getCardsArray().forEach(createMarker);
 
-// Прокидываем текущие координаты пина в поле адрес
-mainPinMarker.on('moveend', (evt) => {
+// Добавляем метки объявлений на карту
+const renderMarkers = () => getCardsArray().forEach(createMarker);
+
+// Удаляем метки
+const clearMap = () => markerGroup.clearLayers();
+
+// Прокидываем текущие координаты основной метки в поле адрес
+const onFormMarkerDrag = (evt) => {
   addressNode.value = evt.target.getLatLng();
-});
+};
 
-// Возвращаем карту и пин на место по нажатию "очистить"
-formNode.addEventListener('reset', () => {
-  mainPinMarker.setLatLng({
-    lat: 35.6895,
-    lng: 139.692,
-  });
-  map.setView({
-    lat: 35.68,
-    lng: 139.75,
-  }, 13);
-});
+// Инициализация карты с метками
+const initMap = () => {
+  map.on('load',
+    activateForms(),
+    renderMarkers(),
+  );
+  formPinMarker.addTo(map);
+  formPinMarker.on('moveend', onFormMarkerDrag);
+};
 
-export {};
+export {
+  initMap,
+  clearMap,
+  renderMarkers,
+  MAP,
+  map,
+  createMarker,
+  formPinMarker,
+};

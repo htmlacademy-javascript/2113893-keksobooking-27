@@ -24,10 +24,10 @@ const onSliderChange = () => {
 sliderNode.setAttribute('disabled', true);
 sliderNode.removeAttribute('disabled');
 
-// sliderNode.noUiSlider.destroy();
+const sliderDestroy = () => sliderNode.noUiSlider.destroy();
 
 const initSlider = () => {
   sliderNode.noUiSlider.on('update', onSliderChange);
 };
 
-export {initSlider};
+export {initSlider, sliderDestroy};
