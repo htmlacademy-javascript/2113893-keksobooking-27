@@ -1,11 +1,12 @@
-import {getCardsArray} from './data.js';
-import {renderPopup} from './popup.js';
-import {deactivateForms, activateForms} from './toggle-form.js';
 import {validateEstateForm} from './validation.js';
-
-document.querySelector('#map-canvas').append(renderPopup(getCardsArray()[0]));
+import {initSlider} from './slider.js';
+import {initMap} from './map.js';
+import {deactivateForms} from './toggle-form.js';
 
 deactivateForms();
-activateForms();
+
+initSlider();
 
 validateEstateForm();
+
+initMap();
