@@ -3,6 +3,7 @@
 import {getCardsArray} from './data.js';
 import {renderPopup} from './popup.js';
 import {activateForms} from './toggle-form.js';
+import {sliderEnable} from './slider.js';
 
 const addressNode = document.querySelector('#address');
 const mapContainer = document.querySelector('#map-canvas');
@@ -105,6 +106,7 @@ const onFormMarkerDrag = (evt) => {
 const initMap = () => {
   map.on('load',
     activateForms(),
+    sliderEnable(),
     renderMarkers(),
   );
   formPinMarker.addTo(map);

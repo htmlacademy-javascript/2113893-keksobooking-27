@@ -43,9 +43,9 @@ const getFeatures = (features, list) => {
 
 // Создаем узлы под фото и присваиваем им адрес фотографий
 const getPhotos = (photos, container, template, alt) => {
-  photos.forEach(() => {
+  photos.forEach((item) => {
     const photo = template.cloneNode(true);
-    photo.src = photos;
+    photo.src = item;
     photo.alt = alt;
     container.append(photo);
   });

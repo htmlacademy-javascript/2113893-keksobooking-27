@@ -66,7 +66,7 @@ const onPriceChange = () => pristine.validate(priceNode);
 
 // Синхронизируем поля «Время заезда» и «Время выезда»
 
-const synch2Nodes = (Node1, Node2) => {
+const synchNodes = (Node1, Node2) => {
   Node1.onchange = () => {Node2.value = Node1.value;};
 };
 
@@ -98,8 +98,8 @@ const validateEstateForm = () => {
   typeNode.addEventListener('change', onTypeChange);
   capacityNode.addEventListener('change', onRoomsandCapacityChange);
   roomsNode.addEventListener('change', onRoomsandCapacityChange);
-  checkInNode.addEventListener('change', synch2Nodes(checkInNode, checkOutNode));
-  checkOutNode.addEventListener('change', synch2Nodes(checkOutNode, checkInNode));
+  checkInNode.addEventListener('change', synchNodes(checkInNode, checkOutNode));
+  checkOutNode.addEventListener('change', synchNodes(checkOutNode, checkInNode));
 
   pristine.validate();
 };
