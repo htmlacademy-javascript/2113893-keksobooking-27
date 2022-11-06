@@ -28,11 +28,12 @@ const PINS = {
   FORM: {
     URL: './img/main-pin.svg',
     SIZE: 40,
+    DECIMALS: 5,
   },
   ANCHOR_DIVIDER: 2,
 };
 
-// Активируем форму и фильтры при загрузке карты
+// Центрируем карту при загрузке
 const map = L.map(mapContainer).setView({
   lat: MAP.CENTER.LAT,
   lng: MAP.CENTER.LNG
@@ -91,15 +92,15 @@ const createMarker = (card) => {
     .bindPopup(renderPopup(card));
 };
 
-// Добавляем метки объявлений на карту
+// Функция добавления меток объявлений на карту
 const renderMarkers = () => getCardsArray().forEach(createMarker);
 
-// Удаляем метки
+// Функция удаления меток
 const clearMap = () => markerGroup.clearLayers();
 
 // Прокидываем текущие координаты основной метки в поле адрес
 const onFormMarkerDrag = (evt) => {
-  addressNode.value = evt.target.getLatLng();
+  addressNode.value = `${(evt.target.getLatLng().lat).toFixed(PINS.FORM.DECIMALS)}, ${(evt.target.getLatLng().lng).toFixed(PINS.FORM.DECIMALS)}`;
 };
 
 // Инициализация карты с метками

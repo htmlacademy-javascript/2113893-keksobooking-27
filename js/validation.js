@@ -6,6 +6,7 @@ const typeNode = formNode.querySelector('#type');
 const priceNode = formNode.querySelector('#price');
 const roomsNode = formNode.querySelector('#room_number');
 const capacityNode = formNode.querySelector('#capacity');
+const fieldsetTimeNode = formNode.querySelector('.ad-form__element--time');
 const checkInNode = formNode.querySelector('#timein');
 const checkOutNode = formNode.querySelector('#timeout');
 
@@ -65,9 +66,9 @@ const getPriceErrorMessage = () => `Укажите цену от ${PRICE.MIN[typ
 const onPriceChange = () => pristine.validate(priceNode);
 
 // Синхронизируем поля «Время заезда» и «Время выезда»
-
-const synchNodes = (Node1, Node2) => {
-  Node1.onchange = () => {Node2.value = Node1.value;};
+const syncTimes = (evt) => {
+  const targetNode = evt.target.id === 'timein' ? checkOutNode : checkInNode;
+  targetNode.value = evt.target.value;
 };
 
 // Проверка количества комнат и гостей
@@ -98,8 +99,7 @@ const validateEstateForm = () => {
   typeNode.addEventListener('change', onTypeChange);
   capacityNode.addEventListener('change', onRoomsandCapacityChange);
   roomsNode.addEventListener('change', onRoomsandCapacityChange);
-  checkInNode.addEventListener('change', synchNodes(checkInNode, checkOutNode));
-  checkOutNode.addEventListener('change', synchNodes(checkOutNode, checkInNode));
+  fieldsetTimeNode.addEventListener('change', syncTimes);
 
   pristine.validate();
 };
