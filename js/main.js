@@ -4,6 +4,7 @@ import {initMap} from './map.js';
 import {deactivateForms} from './toggle-form.js';
 import {} from './form.js';
 
+
 deactivateForms();
 sliderDisable();
 

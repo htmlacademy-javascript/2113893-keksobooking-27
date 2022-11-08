@@ -39,5 +39,12 @@ const initSlider = () => {
 const sliderDisable = () => sliderNode.setAttribute('disabled', true);
 const sliderEnable = () => sliderNode.removeAttribute('disabled');
 const sliderDestroy = () => sliderNode.noUiSlider.destroy();
+const sliderReset = () => sliderNode.noUiSlider.reset();
 
-export {initSlider, sliderDestroy, sliderDisable, sliderEnable};
+export {
+  initSlider,
+  sliderDestroy,
+  sliderDisable,
+  sliderEnable,
+  sliderReset,
+};

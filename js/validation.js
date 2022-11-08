@@ -1,17 +1,7 @@
 // Модуль валидации объявления
 
-const formNode = document.querySelector('.ad-form');
-const titleNode = formNode.querySelector('#title');
-const typeNode = formNode.querySelector('#type');
-const priceNode = formNode.querySelector('#price');
-const roomsNode = formNode.querySelector('#room_number');
-const capacityNode = formNode.querySelector('#capacity');
-const fieldsetTimeNode = formNode.querySelector('.ad-form__element--time');
-const checkInNode = formNode.querySelector('#timein');
-const checkOutNode = formNode.querySelector('#timeout');
-
 const TITLE = {
-  LENGTH_MIN: 30,
+  LENGTH_MIN: 1,
   LENGTH_MAX: 100,
 };
 
@@ -36,6 +26,16 @@ const CAPACITY_TO_ROOMS_MATCH = {
 };
 
 const CAPACITY_ZERO = '0';
+
+const formNode = document.querySelector('.ad-form');
+const titleNode = formNode.querySelector('#title');
+const typeNode = formNode.querySelector('#type');
+const priceNode = formNode.querySelector('#price');
+const roomsNode = formNode.querySelector('#room_number');
+const capacityNode = formNode.querySelector('#capacity');
+const fieldsetTimeNode = formNode.querySelector('.ad-form__element--time');
+const checkInNode = formNode.querySelector('#timein');
+const checkOutNode = formNode.querySelector('#timeout');
 
 const pristine = new Pristine(
   formNode,

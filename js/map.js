@@ -1,9 +1,10 @@
 // Модуль с картой
 
-import {getCardsArray} from './data.js';
 import {renderPopup} from './popup.js';
 import {activateForms} from './toggle-form.js';
 import {sliderEnable} from './slider.js';
+import {getData} from './api.js';
+import {onError} from './utils.js';
 
 const addressNode = document.querySelector('#address');
 const mapContainer = document.querySelector('#map-canvas');
@@ -93,10 +94,23 @@ const createMarker = (card) => {
 };
 
 // Функция добавления меток объявлений на карту
-const renderMarkers = () => getCardsArray().forEach(createMarker);
+const renderMarkers = (cards) => cards.slice(0, 50).forEach(createMarker);
 
 // Функция удаления меток
 const clearMap = () => markerGroup.clearLayers();
+
+// Функция сброса карты и центрирование метки формы
+const resetMap = () => {
+  formPinMarker.setLatLng({
+    lat: MAP.CENTER.LAT,
+    lng: MAP.CENTER.LNG,
+  });
+  map.setView({
+    lat: MAP.CENTER.LAT,
+    lng: MAP.CENTER.LNG,
+  }, MAP.SCALE);
+};
+
 
 // Прокидываем текущие координаты основной метки в поле адрес
 const onFormMarkerDrag = (evt) => {
@@ -108,7 +122,7 @@ const initMap = () => {
   map.on('load',
     activateForms(),
     sliderEnable(),
-    renderMarkers(),
+    getData(renderMarkers, onError),
   );
   formPinMarker.addTo(map);
   formPinMarker.on('moveend', onFormMarkerDrag);
@@ -118,8 +132,6 @@ export {
   initMap,
   clearMap,
   renderMarkers,
-  MAP,
-  map,
   createMarker,
-  formPinMarker,
+  resetMap,
 };

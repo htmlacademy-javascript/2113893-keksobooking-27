@@ -23,26 +23,32 @@ const hideNode = (node, className) => {
 // Присваиваем значение узлу попапа или скрываем узел
 const processPopupNode = (node, className, nodeProperty, value) => {
   if (value === undefined) {
-    node.querySelector(className).classList.add('visually-hidden');
+    hideNode(node, className);
     return;
   }
   node.querySelector(className)[nodeProperty] = value;
 };
 
 // Убираем ненужные иконки особенностей жилья
-const getFeatures = (features, list) => {
+const getFeatures = (features, list, popup) => {
+  if (features === undefined) {
+    hideNode(popup, '.popup__features');
+    return;
+  }
   list.forEach((listItem) => {
     const isNecessary = features.some(
       (feature) => listItem.classList.contains(`popup__feature--${feature}`)
     );
-    if (!isNecessary) {
-      listItem.remove();
-    }
+    if (!isNecessary) {listItem.remove();}
   });
 };
 
 // Создаем узлы под фото и присваиваем им адрес фотографий
-const getPhotos = (photos, container, template, alt) => {
+const getPhotos = (photos, container, template, alt, popup) => {
+  if (photos === undefined) {
+    hideNode(popup, '.popup__photos');
+    return;
+  }
   photos.forEach((item) => {
     const photo = template.cloneNode(true);
     photo.src = item;
@@ -58,6 +64,9 @@ const renderPopup = ({
   offer: {title, address, price, type, rooms, guests, checkin, checkout, features, description, photos}
 }) => {
   const popup = document.querySelector('#card').content.querySelector('.popup').cloneNode(true);
+  const featureList = popup.querySelector('.popup__features').querySelectorAll('.popup__feature');
+  const photoContainer = popup.querySelector('.popup__photos');
+  const templatePhoto = popup.querySelector('.popup__photo');
 
   processPopupNode(popup, '.popup__avatar', 'src', avatar);
   processPopupNode(popup, '.popup__title', 'textContent', title);
@@ -67,21 +76,8 @@ const renderPopup = ({
   processPopupNode(popup, '.popup__text--price', 'textContent', `${price} ₽/ночь`);
   processPopupNode(popup, '.popup__text--capacity', 'textContent', `${rooms} ${getDeclension(rooms, DECLENSIONS.ROOMS)} для ${guests} ${getDeclension(guests, DECLENSIONS.GUESTS)}`);
   processPopupNode(popup, '.popup__text--time', 'textContent', `Заезд после ${checkin}, выезд до ${checkout}`);
-
-  const featureList = popup.querySelector('.popup__features').querySelectorAll('.popup__feature');
-  if (features === undefined) {
-    hideNode(popup, '.popup__features');
-    return;
-  }
-  getFeatures(features, featureList);
-
-  const photoContainer = popup.querySelector('.popup__photos');
-  const templatePhoto = popup.querySelector('.popup__photo');
-  if (photos === undefined) {
-    hideNode(popup, '.popup__photos');
-    return;
-  }
-  getPhotos(photos, photoContainer, templatePhoto, title);
+  getFeatures(features, featureList, popup);
+  getPhotos(photos, photoContainer, templatePhoto, title, popup);
 
   return (popup);
 };
