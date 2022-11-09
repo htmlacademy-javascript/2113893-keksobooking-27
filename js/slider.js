@@ -2,32 +2,49 @@ import {pristine, priceNode} from './validation.js';
 
 const sliderNode = document.querySelector('.ad-form__slider');
 
+const SLIDER = {
+  START: 0,
+  STEP: 100,
+  RANGE: {
+    MIN: 0,
+    MAX: 100000
+  },
+  DECIMALS: 0,
+  CONNECT: 'upper',
+};
+
 noUiSlider.create(sliderNode, {
   range: {
-    min: 0,
-    max: 100000,
+    min: SLIDER.RANGE.MIN,
+    max: SLIDER.RANGE.MAX,
   },
-  start: 1000,
-  step: 100,
-  connect: 'lower',
+  start: SLIDER.START,
+  step: SLIDER.STEP,
+  connect: SLIDER.CONNECT,
   format: {
-    to: (value) => value.toFixed(0),
+    to: (value) => value.toFixed(SLIDER.DECIMALS),
     from: (value) => parseFloat(value),
   },
 });
 
-const onSliderChange = () => {
-  priceNode.value = sliderNode.noUiSlider.get();
-  sliderNode.noUiSlider.on('set', pristine.validate(priceNode));
-};
-
-sliderNode.setAttribute('disabled', true);
-sliderNode.removeAttribute('disabled');
-
-const sliderDestroy = () => sliderNode.noUiSlider.destroy();
-
 const initSlider = () => {
-  sliderNode.noUiSlider.on('update', onSliderChange);
+  sliderNode.noUiSlider.on('start', () => {
+    sliderNode.noUiSlider.on('update', () => {
+      priceNode.value = sliderNode.noUiSlider.get();
+      pristine.validate(priceNode);
+    });
+  });
 };
 
-export {initSlider, sliderDestroy};
+const sliderDisable = () => sliderNode.setAttribute('disabled', true);
+const sliderEnable = () => sliderNode.removeAttribute('disabled');
+const sliderDestroy = () => sliderNode.noUiSlider.destroy();
+const sliderReset = () => sliderNode.noUiSlider.reset();
+
+export {
+  initSlider,
+  sliderDestroy,
+  sliderDisable,
+  sliderEnable,
+  sliderReset,
+};
