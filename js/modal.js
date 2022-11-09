@@ -10,14 +10,13 @@ const renderModal = (nodeTemplate) => {
   document.body.append(node);
   const closeModal = () => {
     node.remove();
-    // eslint-disable-next-line no-use-before-define
     document.removeEventListener('keydown', onEscKeydown);
   };
-  const onEscKeydown = (evt) => {
+  function onEscKeydown (evt) {
     if (isEscapeKey(evt)) {
       closeModal();
     }
-  };
+  }
   node.addEventListener('click', closeModal);
   document.addEventListener('keydown', onEscKeydown);
 };

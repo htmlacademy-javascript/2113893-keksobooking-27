@@ -32,6 +32,7 @@ const PINS = {
     DECIMALS: 5,
   },
   ANCHOR_DIVIDER: 2,
+  AMOUNT_ON_MAP: 10,
 };
 
 // Центрируем карту при загрузке
@@ -94,7 +95,7 @@ const createMarker = (card) => {
 };
 
 // Функция добавления меток объявлений на карту
-const renderMarkers = (cards) => cards.slice(0, 50).forEach(createMarker);
+const renderMarkers = (cards) => cards.slice(0, PINS.AMOUNT_ON_MAP).forEach(createMarker);
 
 // Функция удаления меток
 const clearMap = () => markerGroup.clearLayers();
