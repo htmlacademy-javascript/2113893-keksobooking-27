@@ -47,9 +47,7 @@ const onSubmit = (evt) => {
     );
     resetPage();
     unblockSubmitButton();
-    return;
   }
-  openModalError();
 };
 
 formNode.addEventListener('reset', onReset);

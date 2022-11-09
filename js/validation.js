@@ -1,7 +1,7 @@
 // Модуль валидации объявления
 
 const TITLE = {
-  LENGTH_MIN: 1,
+  LENGTH_MIN: 30,
   LENGTH_MAX: 100,
 };
 
@@ -44,7 +44,7 @@ const pristine = new Pristine(
     errorClass: 'ad-form__element--invalid',
     errorTextParent: 'ad-form__element',
   },
-  true
+  false,
 );
 
 // Проверяем поле с заголовком объявления
@@ -100,8 +100,6 @@ const validateEstateForm = () => {
   capacityNode.addEventListener('change', onRoomsandCapacityChange);
   roomsNode.addEventListener('change', onRoomsandCapacityChange);
   fieldsetTimeNode.addEventListener('change', syncTimes);
-
-  pristine.validate();
 };
 
 export {

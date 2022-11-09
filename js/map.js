@@ -11,7 +11,7 @@ const mapContainer = document.querySelector('#map-canvas');
 
 // Настройки карты
 const MAP = {
-  CENTER: {
+  DEFAULT: {
     LAT: 35.68,
     LNG: 139.75,
   },
@@ -37,8 +37,8 @@ const PINS = {
 
 // Центрируем карту при загрузке
 const map = L.map(mapContainer).setView({
-  lat: MAP.CENTER.LAT,
-  lng: MAP.CENTER.LNG
+  lat: MAP.DEFAULT.LAT,
+  lng: MAP.DEFAULT.LNG
 }, MAP.SCALE);
 
 // Добавляем слой с картой openstreetmap
@@ -62,8 +62,8 @@ const formPinIcon = initMarkerIcon(PINS.FORM.URL, PINS.FORM.SIZE, PINS.ANCHOR_DI
 // Добавляем возможность перетаскивать, позиционируем
 const formPinMarker = L.marker(
   {
-    lat: MAP.CENTER.LAT,
-    lng: MAP.CENTER.LNG,
+    lat: MAP.DEFAULT.LAT,
+    lng: MAP.DEFAULT.LNG,
   },
   {
     draggable: true,
@@ -103,12 +103,12 @@ const clearMap = () => markerGroup.clearLayers();
 // Функция сброса карты и центрирование метки формы
 const resetMap = () => {
   formPinMarker.setLatLng({
-    lat: MAP.CENTER.LAT,
-    lng: MAP.CENTER.LNG,
+    lat: MAP.DEFAULT.LAT,
+    lng: MAP.DEFAULT.LNG,
   });
   map.setView({
-    lat: MAP.CENTER.LAT,
-    lng: MAP.CENTER.LNG,
+    lat: MAP.DEFAULT.LAT,
+    lng: MAP.DEFAULT.LNG,
   }, MAP.SCALE);
 };
 
@@ -126,7 +126,8 @@ const initMap = () => {
     getData(renderMarkers, onError),
   );
   formPinMarker.addTo(map);
-  formPinMarker.on('moveend', onFormMarkerDrag);
+  formPinMarker.on('move', onFormMarkerDrag);
+  addressNode.value = `${MAP.DEFAULT.LAT}, ${MAP.DEFAULT.LNG}`;
 };
 
 export {
