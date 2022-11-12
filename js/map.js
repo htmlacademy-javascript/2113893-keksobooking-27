@@ -25,11 +25,11 @@ const MAP = {
 const PINS = {
   DEFAULT: {
     URL: './img/pin.svg',
-    SIZE: 30,
+    SIZE: 40,
   },
   FORM: {
     URL: './img/main-pin.svg',
-    SIZE: 40,
+    SIZE: 52,
     DECIMALS: 5,
   },
   ANCHOR_DIVIDER: 2,

@@ -47,6 +47,12 @@ const pristine = new Pristine(
   false,
 );
 
+// Переводим на русский язык сообщения об ишибках (для адреса)
+Pristine.addMessages('ru', {
+  required: 'Обязательное поле'
+});
+Pristine.setLocale('ru');
+
 // Проверяем поле с заголовком объявления
 const validateTitle = (value) => value.length >= TITLE.LENGTH_MIN && value.length <= TITLE.LENGTH_MAX;
 
