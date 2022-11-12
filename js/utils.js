@@ -1,40 +1,6 @@
-// Случайное целое число
+// Модуль вспомогательных функций
 
 const ALERT_SHOW_TIME = 5000;
-
-const getRandomPositiveInteger = (min, max) => {
-  if (min < 0 || max < 0 || !Number.isFinite(min) || !Number.isFinite(min)) {
-    return NaN;
-  } else if (min === max) {
-    return min;
-  } else if (min === 0 && max === 0) {
-    return 0;
-  } else if (min > max) {
-    [min,max] = [max,min];
-  }
-  return Math.floor(Math.random() * (max - min + 1) ) + min;
-};
-
-//Cлучайное дробное число, decimals - число знаков после запятой
-const getRandomPositiveFloat = (min, max, decimals) => {
-  if (min < 0 || max < 0 || decimals < 0 ||
-    !Number.isFinite(min) || !Number.isFinite(min) || !Number.isFinite(decimals)) {
-    return NaN;
-  } else if (min === max) {
-    return min;
-  } else if (min === 0 && max === 0) {
-    return 0;
-  } else if (min > max) {
-    [min,max] = [max,min];
-  }
-  return +((Math.random() * (max - min)) + min).toFixed(decimals);
-};
-
-// Случайный элемент массива
-const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0, elements.length - 1)];
-
-// Получить массив случайной длины, от 0 до arrayMinLength
-const getRandomArraySlice = (arrayMinLength, array) => array.slice(0, getRandomPositiveInteger(arrayMinLength, array.length));
 
 // Получить склонение слова
 const getDeclension = (number, declensions) => {
@@ -53,6 +19,7 @@ const getDeclension = (number, declensions) => {
 };
 
 // Функция вывода сообщения на красном фоне
+
 const showAlert = (message) => {
   const alertContainer = document.createElement('div');
   alertContainer.style.zIndex = '100';
@@ -75,18 +42,23 @@ const showAlert = (message) => {
 };
 
 // Сообщение, если при загрузке данных с сервера произошла ошибка запроса
-const onError = () => showAlert('Сервер не отвечает, попробуйте ещё раз');
+const onError = () => showAlert('Что-то пошло не так... попробуйте ещё раз');
 
 // Проверяем нажатие клавиши Escape
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
+// Ставим задержку setTimeout перед исполнением функции cb
+const debounce = (cb, timeoutDelay = 500) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => cb.apply(this, rest), timeoutDelay);
+  };
+};
+
 export {
-  getRandomPositiveInteger,
-  getRandomPositiveFloat,
-  getRandomArrayElement,
-  getRandomArraySlice,
   getDeclension,
-  showAlert,
   onError,
   isEscapeKey,
+  debounce,
 };

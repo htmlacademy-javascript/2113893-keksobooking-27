@@ -89,7 +89,7 @@ const onRoomsandCapacityChange = () => {
 };
 
 // Объединяем проверку полей в единую функцию
-const validateEstateForm = () => {
+const intitFormValidation = () => {
   pristine.addValidator(titleNode, validateTitle, getTitleErrorMessage);
   pristine.addValidator(priceNode, validatePrice, getPriceErrorMessage);
   pristine.addValidator(roomsNode, validateRoomsAndCapacity, getRoomsErrorMessage);
@@ -103,8 +103,9 @@ const validateEstateForm = () => {
 };
 
 export {
-  validateEstateForm,
+  intitFormValidation,
   pristine,
   priceNode,
   formNode,
+  PRICE,
 };
