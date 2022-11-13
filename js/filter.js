@@ -74,11 +74,11 @@ const checkFeatures = (card) => {
   });
 };
 
-// Объединяем проверки полей в единую функцию с условием И (строгая выборка)
+// Получаем искомые объявления в количестве не более PINS.MAX
 const getFilteredCards = (cards) => {
-  const tempArray = [];
+  const filteredCards = [];
   for (const card of cards) {
-    if (tempArray.length >= PINS.MAX) {
+    if (filteredCards.length >= PINS.MAX) {
       break;
     }
     if (
@@ -88,10 +88,10 @@ const getFilteredCards = (cards) => {
       && checkGuests(card)
       && checkFeatures(card)
     ) {
-      tempArray.push(card);
+      filteredCards.push(card);
     }
   }
-  return tempArray;
+  return filteredCards;
 };
 
 // Следим за изменениями фильтров карты
