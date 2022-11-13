@@ -5,7 +5,6 @@ import {activateForms} from './toggle-form.js';
 import {sliderEnable} from './slider.js';
 import {getData} from './api.js';
 import {onError} from './utils.js';
-import {renderMarkers} from './filtration.js';
 
 const addressNode = document.querySelector('#address');
 const mapContainer = document.querySelector('#map-canvas');
@@ -33,6 +32,7 @@ const PINS = {
     DECIMALS: 5,
   },
   ANCHOR_DIVIDER: 2,
+  MAX: 10,
 };
 
 // Центрируем карту при загрузке
@@ -114,6 +114,11 @@ const onFormMarkerDrag = (evt) => {
   addressNode.value = `${(evt.target.getLatLng().lat).toFixed(PINS.FORM.DECIMALS)}, ${(evt.target.getLatLng().lng).toFixed(PINS.FORM.DECIMALS)}`;
 };
 
+// Функция добавления меток объявлений на карту
+const renderMarkers = (cards) => cards // берём объект с данными
+  .slice(0, PINS.MAX) // срезаем лишние (по ТЗ) метки
+  .forEach(createMarker); // добавляем метки на карту
+
 // Инициализация карты с метками
 const initMap = () => {
   map.on('load',
@@ -131,4 +136,6 @@ export {
   clearMap,
   createMarker,
   resetMap,
+  renderMarkers,
+  PINS,
 };

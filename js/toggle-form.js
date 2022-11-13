@@ -1,6 +1,6 @@
 // Модуль переключения форм страницы - активное и заблокированное состояние
 
-import {offersFiltersNode} from './filtration.js';
+import {offersFiltersNode} from './filter.js';
 import {formNode} from './validation.js';
 
 // Классы для блокировки форм

@@ -1,21 +1,38 @@
-// Модуль фильтрации и вывода на карту объявлений
+// Модуль фильтрации и вывода на карту искомого жилья
 
 import {getData} from './api.js';
-import {clearMap, createMarker} from './map.js';
+import {clearMap, createMarker, PINS} from './map.js';
 import {onError, debounce} from './utils.js';
 import {PRICE} from './validation.js';
 
+// Нода с фильтрами карты
 const offersFiltersNode = document.querySelector('.map__filters');
+
+// Поле выбора искомого жилья, тип
 const offersTypeNode = offersFiltersNode.querySelector('#housing-type');
+
+// Поле выбора искомого жилья, цена
 const offersPriceNode = offersFiltersNode.querySelector('#housing-price');
+
+// Поле выбора искомого жилья, количество комнат
 const offersRoomsNode = offersFiltersNode.querySelector('#housing-rooms');
+
+// Поле выбора искомого жилья, количество гостей
 const offersGuestsNode = offersFiltersNode.querySelector('#housing-guests');
+
+// Нода с удобствами искомого жилья
 const offersFeaturesNode = offersFiltersNode.querySelector('#housing-features');
+
+// Коллекция с чекбоксами удобств искомого жилья
 const FeaturesListNode = offersFeaturesNode.querySelectorAll('input');
 
+// Задержка отправки запроса на новые карточки, после выбора фильтров, мс
 const RERENDER_DELAY = 500;
-const PINS_ON_MAP = 10;
+
+// Значение фильтра искомого жилья по умолчанию
 const DEFAULT = 'any';
+
+// Диапазоны цен искомого жилья
 const OFFERS_PRICE = {
   LOW: {
     MIN: 0,
@@ -31,7 +48,7 @@ const OFFERS_PRICE = {
   },
 };
 
-
+// Проверки отдельных полей карточек объявлений
 const checkType = (card) => offersTypeNode.value === DEFAULT || offersTypeNode.value === card.offer.type;
 const checkRooms = (card) => offersRoomsNode.value === DEFAULT || card.offer.rooms === Number(offersRoomsNode.value);
 const checkGuests = (card) => offersGuestsNode.value === DEFAULT || card.offer.guests === Number(offersGuestsNode.value);
@@ -43,7 +60,6 @@ const checkPrice = (card) => {
       && card.offer.price < OFFERS_PRICE[chosenPriceRange].MAX
     );
 };
-
 const FeaturesForSearchList = () => Array.from(offersFeaturesNode.querySelectorAll('input:checked'), (input) => input.value);
 const checkFeatures = (card) => {
   if (FeaturesForSearchList() === undefined) {
@@ -58,19 +74,25 @@ const checkFeatures = (card) => {
   });
 };
 
-// Объединяем проверки в единую функцию с условием И
-const cardsFilter = (card) => checkType(card)
-  && checkPrice(card)
-  && checkRooms(card)
-  && checkGuests(card)
-  && checkFeatures(card);
-
-// Функция добавления меток объявлений на карту
-const renderMarkers = (cards) => cards // берём объект с данными
-  .slice() // делаем копию
-  .filter(cardsFilter) // фильтруем
-  .slice(0, PINS_ON_MAP) // срезаем лишние (по ТЗ) метки
-  .forEach(createMarker); // добавляем метки на карту
+// Объединяем проверки полей в единую функцию с условием И (строгая выборка)
+const getFilteredCards = (cards) => {
+  const tempArray = [];
+  for (const card of cards) {
+    if (tempArray.length >= PINS.MAX) {
+      break;
+    }
+    if (
+      checkType(card)
+      && checkPrice(card)
+      && checkRooms(card)
+      && checkGuests(card)
+      && checkFeatures(card)
+    ) {
+      tempArray.push(card);
+    }
+  }
+  return tempArray;
+};
 
 // Следим за изменениями фильтров карты
 const checkFilters = (cb) => {
@@ -96,15 +118,14 @@ const checkFilters = (cb) => {
 // Получаем данные и отрисовываем подходящие метки, с задержкой RERENDER_DELAY
 const getFilteredMarkers = () => {
   getData((cards) => {
-    renderMarkers(cards);
     checkFilters(debounce(
       () => {
         clearMap();
-        renderMarkers(cards);
+        getFilteredCards(cards).forEach(createMarker);
       },
       RERENDER_DELAY,
     ));
   }, onError);
 };
 
-export {renderMarkers, getFilteredMarkers, offersFiltersNode};
+export {getFilteredMarkers, offersFiltersNode};

@@ -1,13 +1,12 @@
 // Управляем кнопками формы
 
 import {pristine, formNode} from './validation.js';
-import {resetMap} from './map.js';
+import {resetMap, renderMarkers} from './map.js';
 import {getData, sendData} from './api.js';
 import {onError} from './utils.js';
 import {openModalError, openModalSuccess} from './modal.js';
 import {sliderReset} from './slider.js';
 import {resetFilters} from './toggle-form.js';
-import {renderMarkers} from './filtration.js';
 
 const submitButton = formNode.querySelector('.ad-form__submit');
 
