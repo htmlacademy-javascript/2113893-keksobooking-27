@@ -31,10 +31,4 @@ const activateForms = () => {
   toggleFormState(offersFiltersNode, mapFormClassToDisable, mapFilters, 'remove', false);
 };
 
-// Сброс фильтров и формы
-const resetFilters = () => {
-  formNode.reset();
-  offersFiltersNode.reset();
-};
-
-export {deactivateForms, activateForms, resetFilters};
+export {deactivateForms, activateForms};

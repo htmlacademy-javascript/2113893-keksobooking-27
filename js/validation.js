@@ -44,7 +44,7 @@ const pristine = new Pristine(
     errorClass: 'ad-form__element--invalid',
     errorTextParent: 'ad-form__element',
   },
-  false,
+  true,
 );
 
 // Переводим на русский язык сообщения об ишибках (для адреса)

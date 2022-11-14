@@ -1,7 +1,7 @@
 // Модуль с картой
 
 import {renderPopup} from './popup.js';
-import {activateForms} from './toggle-form.js';
+import {activateForms} from './form-states.js';
 import {sliderEnable} from './slider.js';
 import {getData} from './api.js';
 import {onError} from './utils.js';
@@ -97,6 +97,11 @@ const createMarker = (card) => {
 // Функция удаления меток
 const clearMap = () => markerGroup.clearLayers();
 
+// Указываем в поле адрес координаты центра карты
+const setDefaultAddress = () => {
+  addressNode.value = `${MAP.DEFAULT.LAT}, ${MAP.DEFAULT.LNG}`;
+};
+
 // Функция сброса карты и центрирование метки формы
 const resetMap = () => {
   formPinMarker.setLatLng({
@@ -107,6 +112,7 @@ const resetMap = () => {
     lat: MAP.DEFAULT.LAT,
     lng: MAP.DEFAULT.LNG,
   }, MAP.SCALE);
+  setDefaultAddress();
 };
 
 // Прокидываем текущие координаты основной метки в поле адрес
@@ -127,8 +133,8 @@ const initMap = () => {
     getData(renderMarkers, onError),
   );
   formPinMarker.addTo(map);
+  setDefaultAddress();
   formPinMarker.on('move', onFormMarkerDrag);
-  addressNode.value = `${MAP.DEFAULT.LAT}, ${MAP.DEFAULT.LNG}`;
 };
 
 export {
@@ -138,4 +144,6 @@ export {
   resetMap,
   renderMarkers,
   PINS,
+  MAP,
+  addressNode,
 };
