@@ -1,7 +1,7 @@
 // Управляем кнопками формы
 
 import {pristine, formNode} from './validation.js';
-import {renderMarkers, resetMap} from './map.js';
+import {resetMap, renderMarkers} from './map.js';
 import {getData, sendData} from './api.js';
 import {onError} from './utils.js';
 import {openModalError, openModalSuccess} from './modal.js';
@@ -29,28 +29,30 @@ const resetPage = () => {
   resetMap();
 };
 
-// Возвращаем карту и основную метку на место по нажатию "очистить"
-const onReset = () => {
-  getData(renderMarkers, onError);
-  resetPage();
-};
-
-// Проверяем форму вместо отправки
-const onSubmit = (evt) => {
-  evt.preventDefault();
-  if (pristine.validate()) {
-    blockSubmitButton();
-    sendData(
-      openModalSuccess,
-      openModalError,
-      new FormData(evt.target),
-    );
+const initFormButtons = () => {
+  // Возвращаем карту и основную метку на место по нажатию "очистить"
+  const onReset = () => {
+    getData(renderMarkers, onError);
     resetPage();
-    unblockSubmitButton();
-    return;
-  }
-  openModalError();
+  };
+
+  // Проверяем форму вместо отправки
+  const onSubmit = (evt) => {
+    evt.preventDefault();
+    if (pristine.validate()) {
+      blockSubmitButton();
+      sendData(
+        openModalSuccess,
+        openModalError,
+        new FormData(evt.target),
+      );
+      resetPage();
+      unblockSubmitButton();
+    }
+  };
+
+  formNode.addEventListener('reset', onReset);
+  formNode.addEventListener('submit', onSubmit);
 };
 
-formNode.addEventListener('reset', onReset);
-formNode.addEventListener('submit', onSubmit);
+export {initFormButtons};

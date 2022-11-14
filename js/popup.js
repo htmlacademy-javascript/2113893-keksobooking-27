@@ -74,8 +74,18 @@ const renderPopup = ({
   processPopupNode(popup, '.popup__description', 'textContent', description);
   processPopupNode(popup, '.popup__type', 'textContent', TYPE_ENG_TO_RU[type]);
   processPopupNode(popup, '.popup__text--price', 'textContent', `${price} ₽/ночь`);
-  processPopupNode(popup, '.popup__text--capacity', 'textContent', `${rooms} ${getDeclension(rooms, DECLENSIONS.ROOMS)} для ${guests} ${getDeclension(guests, DECLENSIONS.GUESTS)}`);
-  processPopupNode(popup, '.popup__text--time', 'textContent', `Заезд после ${checkin}, выезд до ${checkout}`);
+  processPopupNode(
+    popup,
+    '.popup__text--capacity',
+    'textContent',
+    `${rooms} ${getDeclension(rooms, DECLENSIONS.ROOMS)} для ${guests} ${getDeclension(guests, DECLENSIONS.GUESTS)}`
+  );
+  processPopupNode(
+    popup,
+    '.popup__text--time',
+    'textContent',
+    `Заезд после ${checkin}, выезд до ${checkout}`
+  );
   getFeatures(features, featureList, popup);
   getPhotos(photos, photoContainer, templatePhoto, title, popup);
 

@@ -1,7 +1,7 @@
 // Модуль валидации объявления
 
 const TITLE = {
-  LENGTH_MIN: 1,
+  LENGTH_MIN: 30,
   LENGTH_MAX: 100,
 };
 
@@ -44,8 +44,14 @@ const pristine = new Pristine(
     errorClass: 'ad-form__element--invalid',
     errorTextParent: 'ad-form__element',
   },
-  true
+  false,
 );
+
+// Переводим на русский язык сообщения об ишибках (для адреса)
+Pristine.addMessages('ru', {
+  required: 'Обязательное поле'
+});
+Pristine.setLocale('ru');
 
 // Проверяем поле с заголовком объявления
 const validateTitle = (value) => value.length >= TITLE.LENGTH_MIN && value.length <= TITLE.LENGTH_MAX;
@@ -89,7 +95,7 @@ const onRoomsandCapacityChange = () => {
 };
 
 // Объединяем проверку полей в единую функцию
-const validateEstateForm = () => {
+const intitFormValidation = () => {
   pristine.addValidator(titleNode, validateTitle, getTitleErrorMessage);
   pristine.addValidator(priceNode, validatePrice, getPriceErrorMessage);
   pristine.addValidator(roomsNode, validateRoomsAndCapacity, getRoomsErrorMessage);
@@ -100,13 +106,12 @@ const validateEstateForm = () => {
   capacityNode.addEventListener('change', onRoomsandCapacityChange);
   roomsNode.addEventListener('change', onRoomsandCapacityChange);
   fieldsetTimeNode.addEventListener('change', syncTimes);
-
-  pristine.validate();
 };
 
 export {
-  validateEstateForm,
+  intitFormValidation,
   pristine,
   priceNode,
   formNode,
+  PRICE,
 };

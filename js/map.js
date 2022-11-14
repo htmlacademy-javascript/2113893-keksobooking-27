@@ -11,7 +11,7 @@ const mapContainer = document.querySelector('#map-canvas');
 
 // Настройки карты
 const MAP = {
-  CENTER: {
+  DEFAULT: {
     LAT: 35.68,
     LNG: 139.75,
   },
@@ -24,21 +24,21 @@ const MAP = {
 const PINS = {
   DEFAULT: {
     URL: './img/pin.svg',
-    SIZE: 30,
+    SIZE: 40,
   },
   FORM: {
     URL: './img/main-pin.svg',
-    SIZE: 40,
+    SIZE: 52,
     DECIMALS: 5,
   },
   ANCHOR_DIVIDER: 2,
-  AMOUNT_ON_MAP: 10,
+  MAX: 10,
 };
 
 // Центрируем карту при загрузке
 const map = L.map(mapContainer).setView({
-  lat: MAP.CENTER.LAT,
-  lng: MAP.CENTER.LNG
+  lat: MAP.DEFAULT.LAT,
+  lng: MAP.DEFAULT.LNG
 }, MAP.SCALE);
 
 // Добавляем слой с картой openstreetmap
@@ -62,8 +62,8 @@ const formPinIcon = initMarkerIcon(PINS.FORM.URL, PINS.FORM.SIZE, PINS.ANCHOR_DI
 // Добавляем возможность перетаскивать, позиционируем
 const formPinMarker = L.marker(
   {
-    lat: MAP.CENTER.LAT,
-    lng: MAP.CENTER.LNG,
+    lat: MAP.DEFAULT.LAT,
+    lng: MAP.DEFAULT.LNG,
   },
   {
     draggable: true,
@@ -94,29 +94,30 @@ const createMarker = (card) => {
     .bindPopup(renderPopup(card));
 };
 
-// Функция добавления меток объявлений на карту
-const renderMarkers = (cards) => cards.slice(0, PINS.AMOUNT_ON_MAP).forEach(createMarker);
-
 // Функция удаления меток
 const clearMap = () => markerGroup.clearLayers();
 
 // Функция сброса карты и центрирование метки формы
 const resetMap = () => {
   formPinMarker.setLatLng({
-    lat: MAP.CENTER.LAT,
-    lng: MAP.CENTER.LNG,
+    lat: MAP.DEFAULT.LAT,
+    lng: MAP.DEFAULT.LNG,
   });
   map.setView({
-    lat: MAP.CENTER.LAT,
-    lng: MAP.CENTER.LNG,
+    lat: MAP.DEFAULT.LAT,
+    lng: MAP.DEFAULT.LNG,
   }, MAP.SCALE);
 };
-
 
 // Прокидываем текущие координаты основной метки в поле адрес
 const onFormMarkerDrag = (evt) => {
   addressNode.value = `${(evt.target.getLatLng().lat).toFixed(PINS.FORM.DECIMALS)}, ${(evt.target.getLatLng().lng).toFixed(PINS.FORM.DECIMALS)}`;
 };
+
+// Функция добавления меток объявлений на карту
+const renderMarkers = (cards) => cards // берём объект с данными
+  .slice(0, PINS.MAX) // срезаем лишние (по ТЗ) метки
+  .forEach(createMarker); // добавляем метки на карту
 
 // Инициализация карты с метками
 const initMap = () => {
@@ -126,13 +127,15 @@ const initMap = () => {
     getData(renderMarkers, onError),
   );
   formPinMarker.addTo(map);
-  formPinMarker.on('moveend', onFormMarkerDrag);
+  formPinMarker.on('move', onFormMarkerDrag);
+  addressNode.value = `${MAP.DEFAULT.LAT}, ${MAP.DEFAULT.LNG}`;
 };
 
 export {
   initMap,
   clearMap,
-  renderMarkers,
   createMarker,
   resetMap,
+  renderMarkers,
+  PINS,
 };
