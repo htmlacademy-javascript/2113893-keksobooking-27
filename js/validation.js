@@ -1,31 +1,12 @@
 // Модуль валидации объявления
 
-const TITLE = {
-  LENGTH_MIN: 30,
-  LENGTH_MAX: 100,
-};
-
-const PRICE = {
-  MIN: {
-    bungalow: 0,
-    flat: 1000,
-    hotel: 3000,
-    house: 5000,
-    palace: 10000,
-  },
-  MAX: 100000,
-};
-
-const ROOMS_MAX = 100;
-
-const CAPACITY_TO_ROOMS_MATCH = {
-  0: ['100'],
-  1: ['1', '2', '3'],
-  2: ['2', '3'],
-  3: ['3'],
-};
-
-const CAPACITY_ZERO = '0';
+import {
+  ROOMS_MAX,
+  CAPACITY_TO_ROOMS_MATCH,
+  CAPACITY_ZERO,
+  Title,
+  Price,
+} from './setup.js';
 
 const formNode = document.querySelector('.ad-form');
 const titleNode = formNode.querySelector('#title');
@@ -41,6 +22,7 @@ const pristine = new Pristine(
   formNode,
   {
     classTo: 'ad-form__element',
+    successClass: 'ad-form__element--valid',
     errorClass: 'ad-form__element--invalid',
     errorTextParent: 'ad-form__element',
   },
@@ -54,20 +36,20 @@ Pristine.addMessages('ru', {
 Pristine.setLocale('ru');
 
 // Проверяем поле с заголовком объявления
-const validateTitle = (value) => value.length >= TITLE.LENGTH_MIN && value.length <= TITLE.LENGTH_MAX;
+const validateTitle = (value) => value.length >= Title.LENGTH_MIN && value.length <= Title.LENGTH_MAX;
 
-const getTitleErrorMessage = () => `Укажите заголовок длиной от ${TITLE.LENGTH_MIN} до ${TITLE.LENGTH_MAX} символов`;
+const getTitleErrorMessage = () => `Укажите заголовок длиной от ${Title.LENGTH_MIN} до ${Title.LENGTH_MAX} символов`;
 
 // Добавляем влияние типа жилья на placeholder цены за ночь
 const onTypeChange = () => {
-  priceNode.placeholder = PRICE.MIN[typeNode.value];
+  priceNode.placeholder = Price.MIN[typeNode.value];
   pristine.validate(priceNode);
 };
 
 // Проверяем поле цены за ночь
-const validatePrice = (value) => value >= PRICE.MIN[typeNode.value] && value <= PRICE.MAX;
+const validatePrice = (value) => value >= Price.MIN[typeNode.value] && value <= Price.MAX;
 
-const getPriceErrorMessage = () => `Укажите цену от ${PRICE.MIN[typeNode.value]} до ${PRICE.MAX}`;
+const getPriceErrorMessage = () => `Укажите цену от ${Price.MIN[typeNode.value]} до ${Price.MAX}`;
 
 const onPriceChange = () => pristine.validate(priceNode);
 
@@ -113,5 +95,4 @@ export {
   pristine,
   priceNode,
   formNode,
-  PRICE,
 };

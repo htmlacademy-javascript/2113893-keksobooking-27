@@ -1,19 +1,7 @@
 // Модуль переноса данных объявления в разметку
 
-import {getDeclension} from './utils.js';
-
-const DECLENSIONS = {
-  GUESTS: ['гостя', 'гостей', 'гостей'],
-  ROOMS: ['комната', 'комнаты', 'комнат'],
-};
-
-const TYPE_ENG_TO_RU = {
-  palace: 'Дворец',
-  flat: 'Квартира',
-  house: 'Дом',
-  bungalow: 'Бунгало',
-  hotel: 'Отель',
-};
+import { getDeclension } from './utils.js';
+import { Declensions, typeEngToRu } from './setup.js';
 
 // Скрываем (визуально) узлы без значений
 const hideNode = (node, className) => {
@@ -72,13 +60,13 @@ const renderPopup = ({
   processPopupNode(popup, '.popup__title', 'textContent', title);
   processPopupNode(popup, '.popup__text--address', 'textContent', address);
   processPopupNode(popup, '.popup__description', 'textContent', description);
-  processPopupNode(popup, '.popup__type', 'textContent', TYPE_ENG_TO_RU[type]);
+  processPopupNode(popup, '.popup__type', 'textContent', typeEngToRu[type]);
   processPopupNode(popup, '.popup__text--price', 'textContent', `${price} ₽/ночь`);
   processPopupNode(
     popup,
     '.popup__text--capacity',
     'textContent',
-    `${rooms} ${getDeclension(rooms, DECLENSIONS.ROOMS)} для ${guests} ${getDeclension(guests, DECLENSIONS.GUESTS)}`
+    `${rooms} ${getDeclension(rooms, Declensions.ROOMS)} для ${guests} ${getDeclension(guests, Declensions.GUESTS)}`
   );
   processPopupNode(
     popup,
@@ -92,4 +80,4 @@ const renderPopup = ({
   return (popup);
 };
 
-export {renderPopup};
+export { renderPopup };

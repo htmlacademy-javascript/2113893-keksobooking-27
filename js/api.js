@@ -1,7 +1,8 @@
 // Модуль получения и отправки информации на сервер
 
-const SERVER_URL = 'https://27.javascript.pages.academy/keksobooking';
+import { SERVER_URL } from './setup.js';
 
+// Функция получения данных
 const getData = (onSuccess, onError) => {
   fetch(
     `${SERVER_URL}/data`
@@ -20,6 +21,7 @@ const getData = (onSuccess, onError) => {
     });
 };
 
+// Функция отправки данных
 const sendData = (onSuccess, onError, bodyData) => {
   fetch(
     SERVER_URL,
@@ -37,4 +39,4 @@ const sendData = (onSuccess, onError, bodyData) => {
     .catch(onError);
 };
 
-export {getData, sendData};
+export { getData, sendData };

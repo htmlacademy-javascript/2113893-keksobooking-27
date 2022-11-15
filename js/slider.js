@@ -1,28 +1,18 @@
-import {pristine, priceNode} from './validation.js';
+import { pristine, priceNode } from './validation.js';
+import { SliderSetup } from './setup.js';
 
 const sliderNode = document.querySelector('.ad-form__slider');
 
-const SLIDER = {
-  START: 0,
-  STEP: 100,
-  RANGE: {
-    MIN: 0,
-    MAX: 100000
-  },
-  DECIMALS: 0,
-  CONNECT: 'upper',
-};
-
 noUiSlider.create(sliderNode, {
   range: {
-    min: SLIDER.RANGE.MIN,
-    max: SLIDER.RANGE.MAX,
+    min: SliderSetup.RANGE.MIN,
+    max: SliderSetup.RANGE.MAX,
   },
-  start: SLIDER.START,
-  step: SLIDER.STEP,
-  connect: SLIDER.CONNECT,
+  start: SliderSetup.START,
+  step: SliderSetup.STEP,
+  connect: SliderSetup.CONNECT,
   format: {
-    to: (value) => value.toFixed(SLIDER.DECIMALS),
+    to: (value) => value.toFixed(SliderSetup.DECIMALS),
     from: (value) => parseFloat(value),
   },
 });
@@ -38,12 +28,10 @@ const initSlider = () => {
 
 const sliderDisable = () => sliderNode.setAttribute('disabled', true);
 const sliderEnable = () => sliderNode.removeAttribute('disabled');
-const sliderDestroy = () => sliderNode.noUiSlider.destroy();
 const sliderReset = () => sliderNode.noUiSlider.reset();
 
 export {
   initSlider,
-  sliderDestroy,
   sliderDisable,
   sliderEnable,
   sliderReset,
