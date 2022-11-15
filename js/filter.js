@@ -2,8 +2,9 @@
 
 import {getData} from './api.js';
 import {clearMap, createMarker, PINS} from './map.js';
-import {onError, debounce} from './utils.js';
+import {debounce} from './utils.js';
 import {PRICE} from './validation.js';
+import {openModalError} from './modal.js';
 
 // Нода с фильтрами карты
 const offersFiltersNode = document.querySelector('.map__filters');
@@ -125,7 +126,7 @@ const getFilteredMarkers = () => {
       },
       RERENDER_DELAY,
     ));
-  }, onError);
+  }, openModalError);
 };
 
 export {getFilteredMarkers, offersFiltersNode};

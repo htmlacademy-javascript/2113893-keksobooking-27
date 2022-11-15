@@ -41,6 +41,7 @@ const pristine = new Pristine(
   formNode,
   {
     classTo: 'ad-form__element',
+    successClass: 'ad-form__element--valid',
     errorClass: 'ad-form__element--invalid',
     errorTextParent: 'ad-form__element',
   },

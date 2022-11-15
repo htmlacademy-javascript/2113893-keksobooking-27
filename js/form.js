@@ -3,7 +3,6 @@
 import {pristine, formNode} from './validation.js';
 import {resetMap, renderMarkers, clearMap} from './map.js';
 import {getData, sendData} from './api.js';
-import {onError} from './utils.js';
 import {openModalError, openModalSuccess} from './modal.js';
 import {sliderReset} from './slider.js';
 import {resetImgPreview} from './image-loader.js';
@@ -27,11 +26,22 @@ const unblockSubmitButton = () => {
 
 // Сброс страницы
 const resetPage = () => {
-  document.querySelector('.ad-form').reset();
+  formNode.reset();
   offersFiltersNode.reset();
   resetMap();
   sliderReset();
   resetImgPreview();
+};
+
+const onSuccess = () => {
+  openModalSuccess();
+  resetPage();
+  unblockSubmitButton();
+};
+
+const onFail = () => {
+  openModalError();
+  unblockSubmitButton();
 };
 
 // Иницилизируем функционал кнопок Опубликовать и очистить
@@ -43,12 +53,11 @@ const initFormButtons = () => {
     if (pristine.validate()) {
       blockSubmitButton();
       sendData(
-        openModalSuccess,
-        openModalError,
+        onSuccess,
+        onFail,
         new FormData(evt.target),
       );
-      resetPage();
-      unblockSubmitButton();
+
     }
   };
 
@@ -56,7 +65,7 @@ const initFormButtons = () => {
   const onReset = (evt) => {
     evt.preventDefault();
     clearMap();
-    getData(renderMarkers, onError);
+    getData(renderMarkers, openModalError);
     resetPage();
   };
 

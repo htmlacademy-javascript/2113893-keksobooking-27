@@ -4,7 +4,7 @@ import {renderPopup} from './popup.js';
 import {activateForms} from './form-states.js';
 import {sliderEnable} from './slider.js';
 import {getData} from './api.js';
-import {onError} from './utils.js';
+import {openModalError} from './modal.js';
 
 const addressNode = document.querySelector('#address');
 const mapContainer = document.querySelector('#map-canvas');
@@ -130,7 +130,7 @@ const initMap = () => {
   map.on('load',
     activateForms(),
     sliderEnable(),
-    getData(renderMarkers, onError),
+    getData(renderMarkers, openModalError),
   );
   formPinMarker.addTo(map);
   setDefaultAddress();
