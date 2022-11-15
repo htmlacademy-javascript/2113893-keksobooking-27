@@ -1,12 +1,12 @@
 // Управляем кнопками формы
 
-import {pristine, formNode} from './validation.js';
-import {resetMap, renderMarkers, clearMap} from './map.js';
-import {getData, sendData} from './api.js';
-import {openModalError, openModalSuccess} from './modal.js';
-import {sliderReset} from './slider.js';
-import {resetImgPreview} from './image-loader.js';
-import {offersFiltersNode} from './filter.js';
+import { pristine, formNode } from './validation.js';
+import { resetMap, renderMarkers, clearMap } from './map.js';
+import { getData, sendData } from './api.js';
+import { openModalError, openModalSuccess } from './modal.js';
+import { sliderReset } from './slider.js';
+import { resetImgPreview } from './image-loader.js';
+import { offersFiltersNode } from './filter.js';
 
 const submitButtonNode = formNode.querySelector('.ad-form__submit');
 const resetButtonNode = formNode.querySelector('.ad-form__reset');
@@ -33,12 +33,14 @@ const resetPage = () => {
   resetImgPreview();
 };
 
+// Функция при успешной отправке
 const onSuccess = () => {
   openModalSuccess();
   resetPage();
   unblockSubmitButton();
 };
 
+// Функция на случай проблем с отправкой данных формы
 const onFail = () => {
   openModalError();
   unblockSubmitButton();

@@ -1,11 +1,11 @@
 // Модуль переключения форм страницы - активное и заблокированное состояние
 
-import {offersFiltersNode} from './filter.js';
-import {formNode} from './validation.js';
+import { offersFiltersNode } from './filter.js';
+import { formNode } from './validation.js';
 
 // Классы для блокировки форм
-const cardFormClassToDisable = 'ad-form--disabled';
-const mapFormClassToDisable = 'map__filters--disabled';
+const formClassToDisable = 'ad-form--disabled';
+const filtersClassToDisable = 'map__filters--disabled';
 
 // Поля для блокировки (при обращении через клавиатуру)
 const cardFilters = formNode.querySelectorAll('fieldset, select');
@@ -21,14 +21,14 @@ const toggleFormState = (Form, classToDisableForm, formFilters, classToggle, sta
 
 // Функция блокировки форм и фильтров
 const deactivateForms = () => {
-  toggleFormState(formNode, cardFormClassToDisable, cardFilters, 'add', true);
-  toggleFormState(offersFiltersNode, mapFormClassToDisable, mapFilters, 'add', true);
+  toggleFormState(formNode, formClassToDisable, cardFilters, 'add', true);
+  toggleFormState(offersFiltersNode, filtersClassToDisable, mapFilters, 'add', true);
 };
 
 // Функция активации форм и фильтров
 const activateForms = () => {
-  toggleFormState(formNode, cardFormClassToDisable, cardFilters, 'remove', false);
-  toggleFormState(offersFiltersNode, mapFormClassToDisable, mapFilters, 'remove', false);
+  toggleFormState(formNode, formClassToDisable, cardFilters, 'remove', false);
+  toggleFormState(offersFiltersNode, filtersClassToDisable, mapFilters, 'remove', false);
 };
 
-export {deactivateForms, activateForms};
+export { deactivateForms, activateForms };

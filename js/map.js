@@ -1,51 +1,26 @@
 // Модуль с картой
 
-import {renderPopup} from './popup.js';
-import {activateForms} from './form-states.js';
-import {sliderEnable} from './slider.js';
-import {getData} from './api.js';
-import {openModalError} from './modal.js';
+import { renderPopup } from './popup.js';
+import { activateForms } from './form-states.js';
+import { sliderEnable } from './slider.js';
+import { getData } from './api.js';
+import { openModalError } from './modal.js';
+import { MapSetup, PinSetup } from './setup.js';
 
 const addressNode = document.querySelector('#address');
-const mapContainer = document.querySelector('#map-canvas');
-
-// Настройки карты
-const MAP = {
-  DEFAULT: {
-    LAT: 35.68,
-    LNG: 139.75,
-  },
-  SCALE : 13,
-  TILE: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-  ATTRIBUTION: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-};
-
-// Настройки меток
-const PINS = {
-  DEFAULT: {
-    URL: './img/pin.svg',
-    SIZE: 40,
-  },
-  FORM: {
-    URL: './img/main-pin.svg',
-    SIZE: 52,
-    DECIMALS: 5,
-  },
-  ANCHOR_DIVIDER: 2,
-  MAX: 10,
-};
+const mapContainerNode = document.querySelector('#map-canvas');
 
 // Центрируем карту при загрузке
-const map = L.map(mapContainer).setView({
-  lat: MAP.DEFAULT.LAT,
-  lng: MAP.DEFAULT.LNG
-}, MAP.SCALE);
+const map = L.map(mapContainerNode).setView({
+  lat: MapSetup.DEFAULT.LAT,
+  lng: MapSetup.DEFAULT.LNG
+}, MapSetup.SCALE);
 
 // Добавляем слой с картой openstreetmap
 L.tileLayer(
-  MAP.TILE,
+  MapSetup.TILE,
   {
-    attribution: MAP.ATTRIBUTION,
+    attribution: MapSetup.ATTRIBUTION,
   },
 ).addTo(map);
 
@@ -57,13 +32,13 @@ const initMarkerIcon = (url, size, divider) => L.icon({
 });
 
 // Иконка метки для формы
-const formPinIcon = initMarkerIcon(PINS.FORM.URL, PINS.FORM.SIZE, PINS.ANCHOR_DIVIDER);
+const formPinIcon = initMarkerIcon(PinSetup.MAIN.URL, PinSetup.MAIN.SIZE, PinSetup.ANCHOR_DIVIDER);
 
 // Добавляем возможность перетаскивать, позиционируем
 const formPinMarker = L.marker(
   {
-    lat: MAP.DEFAULT.LAT,
-    lng: MAP.DEFAULT.LNG,
+    lat: MapSetup.DEFAULT.LAT,
+    lng: MapSetup.DEFAULT.LNG,
   },
   {
     draggable: true,
@@ -75,7 +50,7 @@ const formPinMarker = L.marker(
 const markerGroup = L.layerGroup().addTo(map);
 
 // Простая метка
-const pinIcon = initMarkerIcon(PINS.DEFAULT.URL, PINS.DEFAULT.SIZE, PINS.ANCHOR_DIVIDER);
+const pinIcon = initMarkerIcon(PinSetup.DEFAULT.URL, PinSetup.DEFAULT.SIZE, PinSetup.ANCHOR_DIVIDER);
 
 // Функция добавления метки и наполнения попапа
 const createMarker = (card) => {
@@ -99,30 +74,30 @@ const clearMap = () => markerGroup.clearLayers();
 
 // Указываем в поле адрес координаты центра карты
 const setDefaultAddress = () => {
-  addressNode.value = `${MAP.DEFAULT.LAT}, ${MAP.DEFAULT.LNG}`;
+  addressNode.value = `${MapSetup.DEFAULT.LAT}, ${MapSetup.DEFAULT.LNG}`;
 };
 
 // Функция сброса карты и центрирование метки формы
 const resetMap = () => {
   formPinMarker.setLatLng({
-    lat: MAP.DEFAULT.LAT,
-    lng: MAP.DEFAULT.LNG,
+    lat: MapSetup.DEFAULT.LAT,
+    lng: MapSetup.DEFAULT.LNG,
   });
   map.setView({
-    lat: MAP.DEFAULT.LAT,
-    lng: MAP.DEFAULT.LNG,
-  }, MAP.SCALE);
+    lat: MapSetup.DEFAULT.LAT,
+    lng: MapSetup.DEFAULT.LNG,
+  }, MapSetup.SCALE);
   setDefaultAddress();
 };
 
 // Прокидываем текущие координаты основной метки в поле адрес
 const onFormMarkerDrag = (evt) => {
-  addressNode.value = `${(evt.target.getLatLng().lat).toFixed(PINS.FORM.DECIMALS)}, ${(evt.target.getLatLng().lng).toFixed(PINS.FORM.DECIMALS)}`;
+  addressNode.value = `${(evt.target.getLatLng().lat).toFixed(PinSetup.MAIN.DECIMALS)}, ${(evt.target.getLatLng().lng).toFixed(PinSetup.MAIN.DECIMALS)}`;
 };
 
 // Функция добавления меток объявлений на карту
 const renderMarkers = (cards) => cards // берём объект с данными
-  .slice(0, PINS.MAX) // срезаем лишние (по ТЗ) метки
+  .slice(0, PinSetup.MAX_QTY) // срезаем лишние (по ТЗ) метки
   .forEach(createMarker); // добавляем метки на карту
 
 // Инициализация карты с метками
@@ -143,7 +118,5 @@ export {
   createMarker,
   resetMap,
   renderMarkers,
-  PINS,
-  MAP,
   addressNode,
 };
