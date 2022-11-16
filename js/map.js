@@ -5,7 +5,32 @@ import { activateForms } from './form-states.js';
 import { sliderEnable } from './slider.js';
 import { getData } from './api.js';
 import { openModalError } from './modal.js';
-import { MapSetup, PinSetup } from './setup.js';
+
+// Настройки карты
+const MapSetup = {
+  DEFAULT: {
+    LAT: 35.68,
+    LNG: 139.75,
+  },
+  SCALE : 13,
+  TILE: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  ATTRIBUTION: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+};
+
+// Настройки меток
+const PinSetup = {
+  DEFAULT: {
+    URL: './img/pin.svg',
+    SIZE: 40,
+  },
+  MAIN: {
+    URL: './img/main-pin.svg',
+    SIZE: 52,
+    DECIMALS: 5,
+  },
+  ANCHOR_DIVIDER: 2,
+  MAX_QTY: 10,
+};
 
 const addressNode = document.querySelector('#address');
 const mapContainerNode = document.querySelector('#map-canvas');
@@ -119,4 +144,5 @@ export {
   resetMap,
   renderMarkers,
   addressNode,
+  PinSetup,
 };

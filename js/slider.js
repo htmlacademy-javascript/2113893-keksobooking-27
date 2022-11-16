@@ -1,5 +1,16 @@
 import { pristine, priceNode } from './validation.js';
-import { SliderSetup } from './setup.js';
+
+// Настройки слайдера
+const SliderSetup = {
+  START: 0,
+  STEP: 100,
+  RANGE: {
+    MIN: 0,
+    MAX: 100000
+  },
+  DECIMALS: 0,
+  CONNECT: 'upper',
+};
 
 const sliderNode = document.querySelector('.ad-form__slider');
 

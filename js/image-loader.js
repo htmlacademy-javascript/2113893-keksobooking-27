@@ -1,6 +1,7 @@
 // Модуль обработки загружаемых изображений
 
-import { IMG_TYPES } from './setup.js';
+// Поддерживаемые типы изображений
+const IMG_TYPES = ['jpg', 'jpeg', 'png', 'webp', 'avif'];
 
 const avatarLoaderNode = document.querySelector('#avatar');
 const avatarPreviewImgNode = document.querySelector('.ad-form-header__preview img');
