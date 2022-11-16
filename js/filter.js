@@ -1,15 +1,32 @@
 // Модуль фильтрации и вывода на карту искомого жилья
 
 import { getData } from './api.js';
-import { clearMap, createMarker } from './map.js';
+import { clearMap, createMarker, PinSetup } from './map.js';
 import { debounce } from './utils.js';
 import { openModalError } from './modal.js';
-import {
-  RERENDER_DELAY,
-  OffersPriceToRange,
-  FILTER_DEFAULT_VALUE,
-  PinSetup,
-} from './setup.js';
+import { Price } from './validation.js';
+
+// Задержка отправки запроса на новые карточки, после выбора фильтров, мс
+const RERENDER_DELAY = 500;
+
+// Значение фильтра искомого жилья по умолчанию
+const FILTER_DEFAULT_VALUE = 'any';
+
+// Диапазоны цен искомого жилья
+const OffersPriceToRange = {
+  LOW: {
+    MIN: 0,
+    MAX: 10000,
+  },
+  MIDDLE: {
+    MIN: 10000,
+    MAX: 50000,
+  },
+  HIGH: {
+    MIN: 50000,
+    MAX: Price.MAX,
+  },
+};
 
 // Нода с фильтрами карты
 const offersFiltersNode = document.querySelector('.map__filters');
@@ -44,17 +61,14 @@ const checkPrice = (card) => {
       && card.offer.price < OffersPriceToRange[chosenPriceRange].MAX
     );
 };
-const FeaturesForSearchList = () => Array.from(offersFeaturesNode.querySelectorAll('input:checked'), (input) => input.value);
+const FeaturesForSearch = () => Array.from(offersFeaturesNode.querySelectorAll('input:checked'), (input) => input.value);
 const checkFeatures = (card) => {
-  if (FeaturesForSearchList() === undefined) {
+  if (FeaturesForSearch() === undefined) {
     return true;
   }
-  return FeaturesForSearchList().every((item) => {
-    const temp = card.offer.features;
-    if (temp === undefined) {
-      return false;
-    }
-    return temp.includes(item);
+  return FeaturesForSearch().every((item) => {
+    const cardFeatures = card.offer.features;
+    return cardFeatures === undefined ? false : cardFeatures.includes(item);
   });
 };
 
@@ -80,16 +94,7 @@ const getFilteredCards = (cards) => {
 
 // Следим за изменениями фильтров карты
 const checkFilters = (cb) => {
-  offersTypeNode.addEventListener('change', () => {
-    cb();
-  });
-  offersPriceNode.addEventListener('change', () => {
-    cb();
-  });
-  offersRoomsNode.addEventListener('change', () => {
-    cb();
-  });
-  offersGuestsNode.addEventListener('change', () => {
+  offersFiltersNode.addEventListener('change', () => {
     cb();
   });
   FeaturesListNode.forEach((feature) => {

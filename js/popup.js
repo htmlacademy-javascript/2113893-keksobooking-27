@@ -1,7 +1,21 @@
 // Модуль переноса данных объявления в разметку
 
 import { getDeclension } from './utils.js';
-import { Declensions, typeEngToRu } from './setup.js';
+
+// Склонения
+const Declensions = {
+  GUESTS: ['гостя', 'гостей', 'гостей'],
+  ROOMS: ['комната', 'комнаты', 'комнат'],
+};
+
+// Словарик типов жилья
+const typeEngToRu = {
+  palace: 'Дворец',
+  flat: 'Квартира',
+  house: 'Дом',
+  bungalow: 'Бунгало',
+  hotel: 'Отель',
+};
 
 // Скрываем (визуально) узлы без значений
 const hideNode = (node, className) => {

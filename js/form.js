@@ -30,6 +30,7 @@ const resetPage = () => {
   offersFiltersNode.reset();
   resetMap();
   sliderReset();
+  pristine.reset();
   resetImgPreview();
 };
 

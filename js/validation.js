@@ -1,12 +1,36 @@
 // Модуль валидации объявления
 
-import {
-  ROOMS_MAX,
-  CAPACITY_TO_ROOMS_MATCH,
-  CAPACITY_ZERO,
-  Title,
-  Price,
-} from './setup.js';
+// Требования к заголовку объявления
+const Title = {
+  LENGTH_MIN: 30,
+  LENGTH_MAX: 100,
+};
+
+// Цены на жильё
+const Price = {
+  MIN: {
+    bungalow: 0,
+    flat: 1000,
+    hotel: 3000,
+    house: 5000,
+    palace: 10000,
+  },
+  MAX: 100000,
+};
+
+// Соответствие между числом гостей (слева) и числом комнат
+const CAPACITY_TO_ROOMS_MATCH = {
+  0: ['100'],
+  1: ['1', '2', '3'],
+  2: ['2', '3'],
+  3: ['3'],
+};
+
+// Значение числа комнат для варианта ёмкости "не для всех"
+const ROOMS_MAX = 100;
+
+// Значение ёмкости жилья при выборе варианта "не для всех"
+const CAPACITY_ZERO = '0';
 
 const formNode = document.querySelector('.ad-form');
 const titleNode = formNode.querySelector('#title');
@@ -95,4 +119,5 @@ export {
   pristine,
   priceNode,
   formNode,
+  Price,
 };

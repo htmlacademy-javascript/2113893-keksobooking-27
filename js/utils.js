@@ -29,7 +29,7 @@ const getDeclension = (number, declensions) => {
 };
 
 export {
-  getDeclension,
   isEscapeKey,
   debounce,
+  getDeclension,
 };
